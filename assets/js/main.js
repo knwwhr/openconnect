@@ -462,28 +462,24 @@ function startAssessment() {
         return;
     }
     
-    // 개인정보 수집 페이지로 이동
+    // 바로 1단계로 이동 (개인정보 섹션 제거됨)
     // 모든 섹션 숨기기
     document.querySelectorAll('.section').forEach(section => {
         section.classList.remove('active');
     });
-    
-    // 개인정보 섹션 표시
-    const personalInfoSection = document.getElementById('personal-info');
-    if (personalInfoSection) {
-        personalInfoSection.classList.add('active');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // 1단계로 바로 이동
+    if (window.CareerApp && window.CareerApp.assessmentManager) {
+        window.CareerApp.assessmentManager.showSection('step1');
+        window.CareerApp.assessmentManager.loadStep(1);
+    } else if (app && app.assessmentManager) {
+        app.assessmentManager.showSection('step1');
+        app.assessmentManager.loadStep(1);
     } else {
-        console.error('Personal info section not found');
-        // 섹션이 없으면 기존 방식으로 1단계로 이동
-        if (window.CareerApp && window.CareerApp.assessmentManager) {
-            window.CareerApp.assessmentManager.showSection('step1');
-            window.CareerApp.assessmentManager.loadStep(1);
-        } else if (app && app.assessmentManager) {
-            app.assessmentManager.showSection('step1');
-            app.assessmentManager.loadStep(1);
-        }
+        console.error('Assessment manager not initialized');
     }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function goBackToIncompleteStep() {
