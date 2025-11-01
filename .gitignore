@@ -1,0 +1,11 @@
+# 로그 파일
+*.log
+server.log
+
+# 임시 파일
+temp/
+.DS_Store
+Thumbs.db
+
+# 스크립트
+merge-services.sh

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커리어 진단 도구</title>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-736XG0NZE4"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-736XG0NZE4');
+    </script>
+    
+    <!-- Supabase -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    
+    <link rel="stylesheet" href="assets/css/styles.css?v=5">
+    <link rel="stylesheet" href="assets/css/additional.css?v=5">
+    <link rel="stylesheet" href="assets/css/personal-info.css?v=5">
+    
+    <!-- 네비게이션 하단 고정 완전 제거 & 가로 배열 유지 -->
+    <style>
+        @media (max-width: 768px) {
+            .navigation,
+            #personal-info .navigation,
+            #step1 .navigation,
+            #step2 .navigation, 
+            #step3 .navigation {
+                position: relative !important;
+                bottom: auto !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                z-index: auto !important;
+                margin: 1.5rem 0 !important;
+                padding: 16px !important;
+                background: white !important;
+                border-radius: 12px !important;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+                border-top: none !important;
+                display: flex !important;
+                flex-direction: row !important;
+                gap: 12px !important;
+            }
+            
+            .navigation button {
+                flex: 1 !important;
+                min-width: 0 !important;
+                white-space: nowrap !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>AI 커리어 진단</h1>
+            <p>강점을 발견하고 최적의 커리어를 찾아보세요</p>
+        </header>
+
+        <!-- Main Content -->
+        <main id="main-content">
+            <!-- Landing Page -->
+            <section id="landing" class="section active">
+                <div class="hero">
+                    <h2>📍 3단계 진단으로 나만의 커리어 찾기</h2>
+                    
+                    <!-- 컴팩트한 프로세스 카드 -->
+                    <div class="process-cards-compact">
+                        <div class="compact-card">
+                            <div class="compact-number">1</div>
+                            <div class="compact-content">
+                                <h4>강점 발견 - 가치관, 성향, 전공 분야 분석 (4분)</h4>
+                            </div>
+                        </div>
+                        <div class="compact-arrow">→</div>
+                        <div class="compact-card">
+                            <div class="compact-number">2</div>
+                            <div class="compact-content">
+                                <h4>직무 매칭 - 관심분야, 보유스킬, 직무이해도 (3분)</h4>
+                            </div>
+                        </div>
+                        <div class="compact-arrow">→</div>
+                        <div class="compact-card">
+                            <div class="compact-number">3</div>
+                            <div class="compact-content">
+                                <h4>준비상황 파악 - 취업 희망 시기, 준비된 스펙 확인 (3분)</h4>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 결과 미리보기 -->
+                    <div class="results-preview">
+                        <h3>🎁 진단 결과로 알 수 있는 것들</h3>
+                        <div class="preview-items">
+                            <div class="preview-item">
+                                <span class="preview-icon">📊</span>
+                                <span class="preview-text">내 성격 그래프</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-icon">💼</span>
+                                <span class="preview-text">추천 직업 TOP 5</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-icon">📝</span>
+                                <span class="preview-text">취업 준비 가이드</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="start-section">
+                        <button id="start-assessment" class="btn-primary-large">✨ 지금 시작하기</button>
+                        <p class="info-text">10분만에 진단하고 나만의 커리어를 공략하세요!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Personal Information Collection -->
+            <section id="personal-info" class="section">
+                <div class="progress-container">
+                    <div class="step-indicator">
+                        <div class="step-number active">📋</div>
+                    </div>
+                </div>
+
+                <div class="question-container">
+                    <!-- 개인정보 수집 동의서 -->
+                    <div class="privacy-notice">
+                        <h3>📋 개인정보 수집·이용 동의</h3>
+                        <div class="privacy-content">
+                            <div class="privacy-section">
+                                <h4>1. 수집하는 개인정보 항목</h4>
+                                <p>이름, 휴대폰번호, 성별, 연령대</p>
+                            </div>
+                            <div class="privacy-section">
+                                <h4>2. 개인정보 수집 및 이용 목적</h4>
+                                <p>• 커리어 진단 결과 제공 및 맞춤형 서비스 안내<br>
+                                   • 진단 결과 통계 분석 및 서비스 개선<br>
+                                   • 고객 문의 및 서비스 이용 관련 안내</p>
+                            </div>
+                            <div class="privacy-section">
+                                <h4>3. 개인정보 보유 및 이용기간</h4>
+                                <p>수집일로부터 1년간 보관 후 자동 삭제</p>
+                            </div>
+                            <div class="privacy-section">
+                                <h4>4. 개인정보 제3자 제공</h4>
+                                <p>수집된 개인정보는 제3자에게 제공하지 않습니다.</p>
+                            </div>
+                            <div class="privacy-section">
+                                <h4>5. 동의 거부권 및 불이익</h4>
+                                <p>개인정보 수집에 동의하지 않을 권리가 있으나, 동의 거부 시 진단 서비스 이용이 제한됩니다.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="consent-checkbox">
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="privacy-consent" required>
+                                <span class="checkmark"></span>
+                                <span class="consent-text">개인정보 수집·이용에 <strong>동의합니다</strong></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 개인정보 입력 폼 -->
+                    <div class="personal-info-form">
+                        <h3>📝 아래 정보를 입력해주세요.</h3>
+                        
+                        <div class="form-group">
+                            <label for="user-name">이름 <span class="required">*</span></label>
+                            <input type="text" id="user-name" name="name" required maxlength="10">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="user-phone">휴대폰번호 <span class="required">*</span></label>
+                            <input type="tel" id="user-phone" name="phone" required 
+                                   pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}">
+                        </div>
+
+                        <div class="form-group">
+                            <label>성별 <span class="required">*</span></label>
+                            <div class="checkbox-group" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 8px;">
+                                <label class="checkbox-option" style="display: flex !important; align-items: center; gap: 8px; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 8px; cursor: pointer; background: #fafbfc; font-size: 16px; font-weight: 500;">
+                                    <input type="checkbox" name="gender" value="남성" required style="display: none !important;">
+                                    <span class="checkbox-custom" style="width: 20px !important; height: 20px !important; border: 2px solid #d1d5db !important; border-radius: 4px !important; position: relative; display: inline-block !important; flex-shrink: 0;"></span>
+                                    남성
+                                </label>
+                                <label class="checkbox-option" style="display: flex !important; align-items: center; gap: 8px; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 8px; cursor: pointer; background: #fafbfc; font-size: 16px; font-weight: 500;">
+                                    <input type="checkbox" name="gender" value="여성" required style="display: none !important;">
+                                    <span class="checkbox-custom" style="width: 20px !important; height: 20px !important; border: 2px solid #d1d5db !important; border-radius: 4px !important; position: relative; display: inline-block !important; flex-shrink: 0;"></span>
+                                    여성
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>연령대 <span class="required">*</span></label>
+                            <div class="checkbox-group" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 8px;">
+                                <label class="checkbox-option" style="display: flex !important; align-items: center; gap: 8px; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 8px; cursor: pointer; background: #fafbfc; font-size: 16px; font-weight: 500;">
+                                    <input type="checkbox" name="age_group" value="19-24세" required style="display: none !important;">
+                                    <span class="checkbox-custom" style="width: 20px !important; height: 20px !important; border: 2px solid #d1d5db !important; border-radius: 4px !important; position: relative; display: inline-block !important; flex-shrink: 0;"></span>
+                                    19-24세
+                                </label>
+                                <label class="checkbox-option" style="display: flex !important; align-items: center; gap: 8px; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 8px; cursor: pointer; background: #fafbfc; font-size: 16px; font-weight: 500;">
+                                    <input type="checkbox" name="age_group" value="25-29세" required style="display: none !important;">
+                                    <span class="checkbox-custom" style="width: 20px !important; height: 20px !important; border: 2px solid #d1d5db !important; border-radius: 4px !important; position: relative; display: inline-block !important; flex-shrink: 0;"></span>
+                                    25-29세
+                                </label>
+                                <label class="checkbox-option" style="display: flex !important; align-items: center; gap: 8px; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 8px; cursor: pointer; background: #fafbfc; font-size: 16px; font-weight: 500;">
+                                    <input type="checkbox" name="age_group" value="30-34세" required style="display: none !important;">
+                                    <span class="checkbox-custom" style="width: 20px !important; height: 20px !important; border: 2px solid #d1d5db !important; border-radius: 4px !important; position: relative; display: inline-block !important; flex-shrink: 0;"></span>
+                                    30-34세
+                                </label>
+                                <label class="checkbox-option" style="display: flex !important; align-items: center; gap: 8px; padding: 12px 16px; border: 2px solid #e5e7eb; border-radius: 8px; cursor: pointer; background: #fafbfc; font-size: 16px; font-weight: 500;">
+                                    <input type="checkbox" name="age_group" value="35세이상" required style="display: none !important;">
+                                    <span class="checkbox-custom" style="width: 20px !important; height: 20px !important; border: 2px solid #d1d5db !important; border-radius: 4px !important; position: relative; display: inline-block !important; flex-shrink: 0;"></span>
+                                    35세 이상
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 하단 네비게이션 -->
+                    <div class="navigation">
+                        <button id="personal-info-prev" class="btn-secondary">← 처음으로</button>
+                        <button id="personal-info-next" class="btn-primary" disabled>진단 시작하기 →</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 1: Strengths Discovery -->
+            <section id="step1" class="section">
+                <div class="step-header">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 33%"></div>
+                    </div>
+                    <h2>1단계: 강점 발견</h2>
+                    <p>당신의 가치관과 성향을 파악합니다</p>
+                </div>
+                
+                <div class="question-container" id="step1-questions">
+                    <!-- Questions will be dynamically loaded here -->
+                </div>
+                
+                <div class="navigation">
+                    <button id="step1-prev" class="btn-secondary">이전</button>
+                    <button id="step1-next" class="btn-primary">다음</button>
+                </div>
+            </section>
+
+            <!-- Step 2: Job Matching -->
+            <section id="step2" class="section">
+                <div class="step-header">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 66%"></div>
+                    </div>
+                    <h2>2단계: 직무 매칭</h2>
+                    <p>관심 분야와 역량을 분석합니다</p>
+                </div>
+                
+                <div class="question-container" id="step2-questions">
+                    <!-- Questions will be dynamically loaded here -->
+                </div>
+                
+                <div class="navigation">
+                    <button id="step2-prev" class="btn-secondary">이전</button>
+                    <button id="step2-next" class="btn-primary">다음</button>
+                </div>
+            </section>
+
+            <!-- Step 3: Action Plan -->
+            <section id="step3" class="section">
+                <div class="step-header">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <h2>3단계: 취업 준비</h2>
+                    <p>취업 목표와 현재 준비상황을 파악합니다</p>
+                </div>
+                
+                <div class="question-container" id="step3-questions">
+                    <!-- Questions will be dynamically loaded here -->
+                </div>
+                
+                <div class="navigation">
+                    <button id="step3-prev" class="btn-secondary">이전</button>
+                    <button id="step3-next" class="btn-primary">결과 보기</button>
+                </div>
+            </section>
+
+            <!-- Analysis Loading Page -->
+            <section id="analysis-loading" class="section">
+                <div class="analysis-container">
+                    <div class="analysis-header">
+                        <h2>🧠 AI 분석 중...</h2>
+                        <p>당신의 응답을 바탕으로 맞춤형 결과를 생성하고 있습니다</p>
+                    </div>
+                    
+                    <div class="analysis-progress">
+                        <div class="simple-progress">
+                            <div class="progress-bar-simple">
+                                <div class="progress-fill-simple" style="width: 0%"></div>
+                            </div>
+                            <div class="progress-text-simple">0%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="analysis-steps">
+                        <div class="analysis-step" id="step-riasec">
+                            <div class="step-icon">📊</div>
+                            <div class="step-text">RIASEC 성향 분석 중...</div>
+                            <div class="step-status">⏳</div>
+                        </div>
+                        
+                        <div class="analysis-step" id="step-matching">
+                            <div class="step-icon">💼</div>
+                            <div class="step-text">56개 직업과 매칭 중...</div>
+                            <div class="step-status">⏳</div>
+                        </div>
+                        
+                        <div class="analysis-step" id="step-scoring">
+                            <div class="step-icon">📈</div>
+                            <div class="step-text">개인 맞춤형 점수 계산 중...</div>
+                            <div class="step-status">⏳</div>
+                        </div>
+                        
+                        <div class="analysis-step" id="step-recommendations">
+                            <div class="step-icon">✨</div>
+                            <div class="step-text">최종 추천 결과 생성 중...</div>
+                            <div class="step-status">⏳</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Page -->
+            <section id="results" class="section">
+                <div class="results-header">
+                    <h2>진단 결과</h2>
+                    <p>당신만의 커리어 분석 리포트</p>
+                </div>
+                
+                <div class="results-container">
+                    <!-- Profile Summary -->
+                    <div class="result-card">
+                        <h3>개인 성향 분석</h3>
+                        <div id="profile-summary"></div>
+                    </div>
+
+                    <!-- Strengths Chart -->
+                    <div class="result-card">
+                        <h3>강점 분석</h3>
+                        <p class="chart-description">
+                            <strong>RIASEC 성향 분석</strong> - 개인의 흥미와 성격을 6가지 유형(현실형, 탐구형, 예술형, 사회형, 진취형, 관습형)으로 분석하여 적합한 직업 환경을 제시하는 진단 도구입니다.
+                        </p>
+                        <canvas id="strengths-chart"></canvas>
+                    </div>
+
+                    <!-- Job Matching -->
+                    <div class="result-card">
+                        <h3>추천 직무</h3>
+                        <div id="job-recommendations"></div>
+                    </div>
+
+                    <!-- Action Plan -->
+                    <div class="result-card">
+                        <h3>취업 준비 가이드</h3>
+                        <div id="action-plan"></div>
+                    </div>
+                </div>
+
+                <div class="results-actions">
+                    <button id="results-prev" class="btn-secondary">이전 단계로</button>
+                    <button id="consulting-btn" class="btn-primary btn-consulting">맞춤형 취업컨설팅 받아보기</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 OpenConnect Co., Ltd. All rights reserved.</p>
+            <p>Powered by (주)오픈커넥트<br>모든 서비스 및 콘텐츠의 권리는 (주)오픈커넥트에 귀속됩니다.</p>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Utils and Data -->
+    <script src="assets/js/utils/constants.js"></script>
+    <script src="assets/js/data.js"></script>
+    <script src="assets/js/analytics.js"></script>
+    <script src="assets/js/supabase-client.js"></script>
+    <script src="assets/js/checkbox-handler.js"></script>
+    <script src="assets/js/personal-info.js"></script>
+    <!-- Managers -->
+    <script src="assets/js/managers/UIManager.js"></script>
+    <script src="assets/js/managers/QuestionRenderer.js"></script>
+    <script src="assets/js/managers/ValidationManager.js"></script>
+    <script src="assets/js/managers/OptionHandler.js"></script>
+    <script src="assets/js/managers/StateManager.js"></script>
+    <script src="assets/js/managers/AnalysisManager.js"></script>
+    <script src="assets/js/managers/EventManager.js"></script>
+    <!-- Core -->
+    <script src="assets/js/assessment.js"></script>
+    <script src="assets/js/results.js"></script>
+    <script src="assets/js/main.js"></script>
+</body>
+</html>

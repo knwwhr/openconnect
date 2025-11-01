@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자기소개서 작성 Tool-kit - InsideJob</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+            background-color: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 카드 컨테이너 스타일 - 취업경쟁력 계산기와 동일 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 1rem;
+        }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .section-title i {
+            color: #3b82f6;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* 버튼 스타일 - 취업경쟁력 계산기와 동일 */
+        .btn {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #3b82f6;
+            border: 1px solid #3b82f6;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            box-shadow: 0 8px 16px rgba(239, 68, 68, 0.3);
+        }
+
+        .experience-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            position: relative;
+            background: #f9fafb;
+        }
+
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .experience-number {
+            background: #3b82f6;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-right: 1rem;
+        }
+
+        .remove-experience {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #ef4444;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .strengths-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .strength-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .strength-item input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .strength-examples {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 10px;
+        }
+
+        .example-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .example-item select {
+            width: 200px;
+        }
+
+        .save-section {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .save-section h2 {
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .save-buttons {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .save-buttons .btn {
+            background: white;
+            color: #3b82f6;
+        }
+
+        /* 푸터 스타일 - 취업경쟁력 계산기와 동일 */
+        .footer {
+            margin-top: 3rem;
+            padding: 2rem 0;
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .company-name {
+            font-size: 0.9rem;
+            color: #475569;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .powered-by {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 0.25rem;
+        }
+
+        .rights {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .save-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .save-buttons .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #f3f4f6;
+            height: 4px;
+            z-index: 1000;
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .section-count {
+            background: #3b82f6;
+            color: white;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            margin-left: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 고정 진행도 바 -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-edit"></i> 자기소개서 작성 Tool-kit</h1>
+        </div>
+
+        <!-- 1. 기본정보 -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-user"></i>
+                1. 기본정보
+            </h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">성명</label>
+                    <input type="text" id="name" placeholder="홍길동">
+                </div>
+                <div class="form-group">
+                    <label for="phone">연락처</label>
+                    <input type="tel" id="phone" placeholder="010-1234-5678">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="email">이메일</label>
+                    <input type="email" id="email" placeholder="example@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="school">학교/전공/학년</label>
+                    <input type="text" id="school" placeholder="○○대학교 경영학과 4학년">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="location">거주 지역</label>
+                    <input type="text" id="location" placeholder="서울시 강남구">
+                </div>
+                <div class="form-group">
+                    <label for="hopedDate">희망 취업 시점</label>
+                    <input type="text" id="hopedDate" placeholder="2024년 하반기">
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. 지원 목표 -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-bullseye"></i>
+                2. 지원 목표 (타깃)
+            </h2>
+            <div class="form-group">
+                <label for="industry">희망 산업/회사 (복수 가능)</label>
+                <input type="text" id="industry" placeholder="이커머스/○○, 콘텐츠/△△">
+            </div>
+            <div class="form-group">
+                <label for="position">희망 직무 및 우선순위</label>
+                <input type="text" id="position" placeholder="마케팅 > CS > 영업">
+            </div>
+            <div class="form-group">
+                <label for="motivation">지원 동기 한 문장 (≤200자)</label>
+                <textarea id="motivation" placeholder="왜 이 산업/직무/회사인지" maxlength="200"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="workType">희망 근무 형태/조건</label>
+                <input type="text" id="workType" placeholder="지역, 인턴/신입, 정규/계약, 급여 범위 등">
+            </div>
+        </div>
+
+        <!-- 3. 경험 목록 -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-list"></i>
+                3. 경험 목록
+                <span class="section-count" id="experienceCount">0개</span>
+            </h2>
+            <div id="experienceContainer">
+                <!-- 경험 항목들이 여기에 동적으로 추가됩니다 -->
+            </div>
+            <button type="button" class="btn" onclick="addExperience()">
+                <i class="fas fa-plus"></i> 경험 추가
+            </button>
+        </div>
+
+        <!-- 4. 역량·강점 체크 및 사례 -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-star"></i>
+                4. 역량·강점 체크 및 사례
+            </h2>
+            <label>강점 체크 (최대 5개)</label>
+            <div class="strengths-grid">
+                <div class="strength-item">
+                    <input type="checkbox" id="strength1" value="문제해결">
+                    <label for="strength1">문제해결</label>
+                </div>
+                <div class="strength-item">
+                    <input type="checkbox" id="strength2" value="협업/소통">
+                    <label for="strength2">협업/소통</label>
+                </div>
+                <div class="strength-item">
+                    <input type="checkbox" id="strength3" value="기획력">
+                    <label for="strength3">기획력</label>
+                </div>
+                <div class="strength-item">
+                    <input type="checkbox" id="strength4" value="분석력">
+                    <label for="strength4">분석력</label>
+                </div>
+                <div class="strength-item">
+                    <input type="checkbox" id="strength5" value="실행력">
+                    <label for="strength5">실행력</label>
+                </div>
+                <div class="strength-item">
+                    <input type="checkbox" id="strength6" value="책임감">
+                    <label for="strength6">책임감</label>
+                </div>
+                <div class="strength-item">
+                    <input type="checkbox" id="strength7" value="리더십">
+                    <label for="strength7">리더십</label>
+                </div>
+                <div class="strength-item">
+                    <input type="checkbox" id="strength8" value="성실성">
+                    <label for="strength8">성실성</label>
+                </div>
+                <div class="strength-item">
+                    <input type="checkbox" id="strength9" value="고객지향">
+                    <label for="strength9">고객지향</label>
+                </div>
+                <div class="strength-item">
+                    <input type="checkbox" id="strength10" value="배움/적응">
+                    <label for="strength10">배움/적응</label>
+                </div>
+            </div>
+            
+            <div class="strength-examples">
+                <label>강점별 한 줄 사례 (경험 번호 연결)</label>
+                <div id="strengthExamples">
+                    <!-- 선택된 강점에 대한 사례 입력 필드가 여기에 추가됩니다 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. 교육·자격·수상·어학 -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-certificate"></i>
+                5. 교육·자격·수상·어학
+            </h2>
+            <div id="certificateContainer">
+                <!-- 자격증/교육 항목들이 여기에 추가됩니다 -->
+            </div>
+            <button type="button" class="btn btn-secondary" onclick="addCertificate()">
+                <i class="fas fa-plus"></i> 항목 추가
+            </button>
+        </div>
+
+        <!-- 6. 포트폴리오·링크 -->
+        <div class="section">
+            <h2 class="section-title">
+                <i class="fas fa-link"></i>
+                6. 포트폴리오·링크
+            </h2>
+            <div class="form-group">
+                <label for="linkedin">링크드인</label>
+                <input type="url" id="linkedin" placeholder="https://linkedin.com/in/yourname">
+            </div>
+            <div class="form-group">
+                <label for="portfolio">노션/개인 홈페이지</label>
+                <input type="url" id="portfolio" placeholder="https://yourportfolio.com">
+            </div>
+            <div class="form-group">
+                <label for="blog">블로그</label>
+                <input type="url" id="blog" placeholder="https://yourblog.com">
+            </div>
+            <div class="form-group">
+                <label for="presentation">발표자료/캠페인</label>
+                <input type="url" id="presentation" placeholder="https://drive.google.com/...">
+            </div>
+            <div class="form-group">
+                <label for="others">기타</label>
+                <input type="url" id="others" placeholder="기타 링크">
+            </div>
+        </div>
+
+        <!-- 저장 및 내보내기 -->
+        <div class="save-section">
+            <h2><i class="fas fa-save"></i> 완성된 정보 저장하기</h2>
+            <p>작성하신 정보를 파일로 저장할 수 있습니다</p>
+            <div class="save-buttons">
+                <button type="button" class="btn" onclick="exportToHTML()">
+                    <i class="fas fa-download"></i> 파일(html)로 저장하기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let experienceCount = 0;
+        let certificateCount = 0;
+
+        // 경험 추가 함수
+        function addExperience() {
+            experienceCount++;
+            const container = document.getElementById('experienceContainer');
+            const experienceDiv = document.createElement('div');
+            experienceDiv.className = 'experience-item';
+            experienceDiv.id = `experience-${experienceCount}`;
+            
+            experienceDiv.innerHTML = `
+                <button type="button" class="remove-experience" onclick="removeExperience(${experienceCount})">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="experience-header">
+                    <div class="experience-number">${experienceCount}</div>
+                    <h3>경험 #${experienceCount}</h3>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>경험 이름 (역할/팀)</label>
+                        <input type="text" placeholder="대학 축제 홍보팀 팀원 / 전시회 기획">
+                    </div>
+                    <div class="form-group">
+                        <label>기간 (YYYY.MM–YYYY.MM)</label>
+                        <input type="text" placeholder="2024.03–2024.06">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>투입시간 (주당)</label>
+                        <input type="text" placeholder="주 6시간">
+                    </div>
+                    <div class="form-group">
+                        <label>시작 동기 (왜 시작?)</label>
+                        <input type="text" placeholder="교내 교류 확대 기여, 기획 역량 탐색">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>목표/성과지표</label>
+                    <input type="text" placeholder="방문객 수, 참여율, 예산 절감률 등">
+                </div>
+                <div class="form-group">
+                    <label>본인 역할 (본인이 직접 한 일)</label>
+                    <textarea placeholder="예산안 작성·스폰서 협의·캘린더 운영"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>문제 상황 (1~2개)</label>
+                    <textarea placeholder="초기 홍보 저조, 일정 충돌 등"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>해결 과정 (선택·이유)</label>
+                    <textarea placeholder="SNS 채널 확장, 전단 배포 확대, 협의"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>결과 (수치·증거·피드백)</label>
+                    <textarea placeholder="관람객 200%↑, 만족도 4.8/5"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>배운 점/다르게 할 점</label>
+                    <textarea placeholder="타깃별 채널 전략의 중요성 인식"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>증빙 링크</label>
+                    <input type="url" placeholder="사진/게시물/문서/담당자 확인 등">
+                </div>
+            `;
+            
+            container.appendChild(experienceDiv);
+            updateExperienceCount();
+            updateProgress();
+        }
+
+        // 경험 제거 함수
+        function removeExperience(id) {
+            const element = document.getElementById(`experience-${id}`);
+            if (element) {
+                element.remove();
+                updateExperienceCount();
+                updateProgress();
+            }
+        }
+
+        // 경험 개수 업데이트
+        function updateExperienceCount() {
+            const count = document.querySelectorAll('.experience-item').length;
+            document.getElementById('experienceCount').textContent = `${count}개`;
+        }
+
+        // 자격증/교육 추가 함수
+        function addCertificate() {
+            certificateCount++;
+            const container = document.getElementById('certificateContainer');
+            const certDiv = document.createElement('div');
+            certDiv.className = 'form-row';
+            certDiv.innerHTML = `
+                <div class="form-group">
+                    <label>구분</label>
+                    <select>
+                        <option value="">선택</option>
+                        <option value="교육/수료">교육/수료</option>
+                        <option value="자격/면허">자격/면허</option>
+                        <option value="수상/공모전">수상/공모전</option>
+                        <option value="어학">어학</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>명칭/기관</label>
+                    <input type="text" placeholder="자격증명 / 발급기관">
+                </div>
+                <div class="form-group">
+                    <label>기간/취득일</label>
+                    <input type="text" placeholder="2024.01">
+                </div>
+                <div class="form-group">
+                    <label>주요 내용·점수</label>
+                    <input type="text" placeholder="점수, 등급 등">
+                </div>
+            `;
+            container.appendChild(certDiv);
+        }
+
+        // 강점 체크박스 이벤트
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'checkbox' && e.target.id.startsWith('strength')) {
+                updateStrengthExamples();
+            }
+        });
+
+        // 강점 사례 업데이트
+        function updateStrengthExamples() {
+            const checkedStrengths = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+            const container = document.getElementById('strengthExamples');
+            
+            container.innerHTML = '';
+            checkedStrengths.forEach(strength => {
+                const div = document.createElement('div');
+                div.className = 'example-item';
+                div.innerHTML = `
+                    <select>
+                        <option value="">경험 선택</option>
+                        ${getExperienceOptions()}
+                    </select>
+                    <input type="text" placeholder="${strength} 관련 사례를 한 줄로 작성해주세요" style="flex: 1;">
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // 경험 옵션 생성
+        function getExperienceOptions() {
+            const experiences = document.querySelectorAll('.experience-item');
+            let options = '';
+            experiences.forEach((exp, index) => {
+                options += `<option value="경험 #${index + 1}">경험 #${index + 1}</option>`;
+            });
+            return options;
+        }
+
+        // 진행률 업데이트
+        function updateProgress() {
+            const sections = 6; // 총 섹션 수
+            let completed = 0;
+            
+            // 기본정보 체크
+            if (document.getElementById('name').value) completed += 0.5;
+            if (document.getElementById('email').value) completed += 0.5;
+            
+            // 지원 목표 체크  
+            if (document.getElementById('industry').value) completed += 0.5;
+            if (document.getElementById('motivation').value) completed += 0.5;
+            
+            // 경험 목록 체크
+            if (document.querySelectorAll('.experience-item').length > 0) completed += 1;
+            
+            // 강점 체크
+            if (document.querySelectorAll('input[type="checkbox"]:checked').length > 0) completed += 1;
+            
+            // 자격증 체크
+            if (document.querySelectorAll('#certificateContainer .form-row').length > 0) completed += 1;
+            
+            // 포트폴리오 체크
+            if (document.getElementById('linkedin').value || document.getElementById('portfolio').value) completed += 1;
+            
+            const percentage = (completed / sections) * 100;
+            document.getElementById('progressFill').style.width = `${percentage}%`;
+        }
+
+        // 데이터 저장
+
+        // HTML로 내보내기
+        function exportToHTML() {
+            const data = collectAllData();
+            const html = generateHTMLReport(data);
+            
+            const blob = new Blob([html], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'self-intro-report.html';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // HTML 보고서 생성
+        function generateHTMLReport(data) {
+            return `<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자기소개서 작성 결과 - ${data.basicInfo.name}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        .header {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+        }
+        .header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .header p { opacity: 0.9; font-size: 1.1rem; }
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .section-title {
+            color: #6366f1;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .info-item {
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 10px;
+            border-left: 4px solid #6366f1;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.3rem;
+        }
+        .info-value {
+            color: #6b7280;
+        }
+        .experience-item {
+            border: 2px solid #f1f5f9;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .experience-title {
+            color: #6366f1;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        .experience-detail {
+            margin-bottom: 0.8rem;
+        }
+        .experience-detail strong {
+            color: #374151;
+            display: inline-block;
+            width: 100px;
+        }
+        .strength-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .strength-tag {
+            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 0.5rem;
+        }
+        .link-item a {
+            color: #6366f1;
+            text-decoration: none;
+        }
+        .link-item a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            text-align: center;
+            color: white;
+            font-size: 0.9rem;
+            margin-top: 3rem;
+            padding: 2rem 1rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .footer p {
+            margin: 0;
+            line-height: 1.6;
+        }
+        .footer .company-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .footer .powered-by {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 0.3rem;
+        }
+        .footer .rights {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+        @media print {
+            body { background: white; }
+            .section { box-shadow: none; border: 1px solid #e5e7eb; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>자기소개서 작성 결과</h1>
+            <p>InsideJob Tool-kit으로 작성된 개인 정보 정리</p>
+        </div>
+
+        <!-- 기본정보 -->
+        <div class="section">
+            <h2 class="section-title">
+                🙋‍♂️ 기본정보
+            </h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">성명</div>
+                    <div class="info-value">${data.basicInfo.name}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">연락처</div>
+                    <div class="info-value">${data.basicInfo.phone}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">이메일</div>
+                    <div class="info-value">${data.basicInfo.email}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">학교/전공/학년</div>
+                    <div class="info-value">${data.basicInfo.school}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">거주지역</div>
+                    <div class="info-value">${data.basicInfo.location}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">희망 취업 시점</div>
+                    <div class="info-value">${data.basicInfo.hopedDate}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 지원 목표 -->
+        <div class="section">
+            <h2 class="section-title">
+                🎯 지원 목표
+            </h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">희망 산업/회사</div>
+                    <div class="info-value">${data.target.industry}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">희망 직무</div>
+                    <div class="info-value">${data.target.position}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">희망 근무 형태</div>
+                    <div class="info-value">${data.target.workType}</div>
+                </div>
+            </div>
+            <div class="info-item" style="margin-top: 1rem;">
+                <div class="info-label">지원 동기</div>
+                <div class="info-value">${data.target.motivation}</div>
+            </div>
+        </div>
+
+        <!-- 경험 목록 -->
+        ${data.experiences.length > 0 ? `
+        <div class="section">
+            <h2 class="section-title">
+                📝 경험 목록
+            </h2>
+            ${data.experiences.map((exp, index) => `
+                <div class="experience-item">
+                    <div class="experience-title">경험 ${index + 1}: ${exp.name}</div>
+                    <div class="experience-detail"><strong>기간:</strong> ${exp.period}</div>
+                    <div class="experience-detail"><strong>투입시간:</strong> ${exp.timeInvest}</div>
+                    <div class="experience-detail"><strong>시작동기:</strong> ${exp.motivation}</div>
+                    <div class="experience-detail"><strong>목표/성과:</strong> ${exp.goal}</div>
+                    <div class="experience-detail"><strong>본인역할:</strong> ${exp.role}</div>
+                    <div class="experience-detail"><strong>문제상황:</strong> ${exp.problem}</div>
+                    <div class="experience-detail"><strong>해결과정:</strong> ${exp.solution}</div>
+                    <div class="experience-detail"><strong>결과:</strong> ${exp.result}</div>
+                    <div class="experience-detail"><strong>배운점:</strong> ${exp.learned}</div>
+                    ${exp.link ? `<div class="experience-detail"><strong>증빙링크:</strong> <a href="${exp.link}" target="_blank">${exp.link}</a></div>` : ''}
+                </div>
+            `).join('')}
+        </div>
+        ` : ''}
+
+        <!-- 강점 -->
+        ${data.strengths.length > 0 ? `
+        <div class="section">
+            <h2 class="section-title">
+                ⭐ 선택한 강점
+            </h2>
+            <div class="strength-list">
+                ${data.strengths.map(strength => `<span class="strength-tag">${strength}</span>`).join('')}
+            </div>
+        </div>
+        ` : ''}
+
+        <!-- 포트폴리오 -->
+        <div class="section">
+            <h2 class="section-title">
+                🔗 포트폴리오 & 링크
+            </h2>
+            ${data.portfolio.linkedin ? `<div class="link-item">🔹 <strong>링크드인:</strong> <a href="${data.portfolio.linkedin}" target="_blank">${data.portfolio.linkedin}</a></div>` : ''}
+            ${data.portfolio.portfolio ? `<div class="link-item">🔹 <strong>포트폴리오:</strong> <a href="${data.portfolio.portfolio}" target="_blank">${data.portfolio.portfolio}</a></div>` : ''}
+            ${data.portfolio.blog ? `<div class="link-item">🔹 <strong>블로그:</strong> <a href="${data.portfolio.blog}" target="_blank">${data.portfolio.blog}</a></div>` : ''}
+            ${data.portfolio.presentation ? `<div class="link-item">🔹 <strong>발표자료:</strong> <a href="${data.portfolio.presentation}" target="_blank">${data.portfolio.presentation}</a></div>` : ''}
+            ${data.portfolio.others ? `<div class="link-item">🔹 <strong>기타:</strong> <a href="${data.portfolio.others}" target="_blank">${data.portfolio.others}</a></div>` : ''}
+        </div>
+
+        <div class="footer">
+            <p class="company-name">© 2025 OpenConnect Co., Ltd. All rights reserved.</p>
+            <p class="powered-by">Powered by (주)오픈커넥트</p>
+            <p class="rights">모든 서비스 및 콘텐츠의 권리는 (주)오픈커넥트에 귀속됩니다.</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem;">📅 작성일: ${new Date().toLocaleDateString('ko-KR')} | 🛠️ 자기소개서 Tool-kit</p>
+        </div>
+    </div>
+</body>
+</html>`;
+        }
+
+        // 모든 데이터 수집
+        function collectAllData() {
+            return {
+                basicInfo: {
+                    name: document.getElementById('name').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value,
+                    school: document.getElementById('school').value,
+                    location: document.getElementById('location').value,
+                    hopedDate: document.getElementById('hopedDate').value
+                },
+                target: {
+                    industry: document.getElementById('industry').value,
+                    position: document.getElementById('position').value,
+                    motivation: document.getElementById('motivation').value,
+                    workType: document.getElementById('workType').value
+                },
+                experiences: Array.from(document.querySelectorAll('.experience-item')).map(exp => {
+                    const inputs = exp.querySelectorAll('input, textarea');
+                    return {
+                        name: inputs[0].value,
+                        period: inputs[1].value,
+                        timeInvest: inputs[2].value,
+                        motivation: inputs[3].value,
+                        goal: inputs[4].value,
+                        role: inputs[5].value,
+                        problem: inputs[6].value,
+                        solution: inputs[7].value,
+                        result: inputs[8].value,
+                        learned: inputs[9].value,
+                        link: inputs[10].value
+                    };
+                }),
+                strengths: Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value),
+                portfolio: {
+                    linkedin: document.getElementById('linkedin').value,
+                    portfolio: document.getElementById('portfolio').value,
+                    blog: document.getElementById('blog').value,
+                    presentation: document.getElementById('presentation').value,
+                    others: document.getElementById('others').value
+                }
+            };
+        }
+
+        // 페이지 로드 시 이벤트 리스너 추가
+        document.addEventListener('DOMContentLoaded', function() {
+            // 입력 필드 변경 시 진행률 업데이트
+            document.addEventListener('input', updateProgress);
+            document.addEventListener('change', updateProgress);
+            
+            // 초기 경험 하나 추가
+            addExperience();
+        });
+    </script>
+
+    <!-- 푸터 추가 -->
+    <div class="footer">
+        <p class="company-name">© 2025 OpenConnect Co., Ltd. All rights reserved.</p>
+        <p class="powered-by">Powered by (주)오픈커넥트</p>
+        <p class="rights">모든 서비스 및 콘텐츠의 권리는 (주)오픈커넥트에 귀속됩니다.</p>
+    </div>
+</body>
+</html>
