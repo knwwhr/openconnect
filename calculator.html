@@ -3851,7 +3851,7 @@
                                 className="btn-primary px-6 py-3 bg-green-600 hover:bg-green-700"
                                 onClick={downloadResultAsHTML}
                             >
-                                📄 HTML 다운로드
+                                <i className="fas fa-download"></i> 파일(html)로 저장하기
                             </button>
                             <button
                                 className="btn-primary px-6 py-3 bg-gray-500 hover:bg-gray-600"
@@ -3874,6 +3874,12 @@
                                 }}
                             >
                                 🔄 다시 진단하기
+                            </button>
+                            <button
+                                className="btn-primary px-6 py-3 bg-blue-600 hover:bg-blue-700"
+                                onClick={() => window.open('https://insidejob.kr', '_blank')}
+                            >
+                                <i className="fas fa-user-tie"></i> 맞춤형 취업컨설팅 받아보기
                             </button>
                         </div>
 
