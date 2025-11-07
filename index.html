@@ -454,24 +454,23 @@
             border: none;
         }
 
-        /* 뒤로가기 버튼 (서비스 실행 중에만 표시) */
+        /* 홈 버튼 (서비스 실행 중에만 표시) */
         .back-to-services-btn {
             position: fixed;
             top: 1.5rem;
             left: 1.5rem;
             background: rgba(59, 130, 246, 0.95);
             color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             border: none;
-            font-weight: 600;
-            font-size: 0.95rem;
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
             z-index: 1000;
             display: none;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: center;
             transition: all 0.3s;
         }
 
@@ -481,12 +480,12 @@
 
         .back-to-services-btn:hover {
             background: rgba(37, 99, 235, 0.95);
-            transform: translateX(-3px);
+            transform: scale(1.1);
             box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
         }
 
         .back-to-services-btn i {
-            font-size: 1rem;
+            font-size: 1.3rem;
         }
 
         /* 푸터 */
@@ -753,10 +752,9 @@
         <iframe id="service-iframe" src="" title="InsideJob Service"></iframe>
     </section>
 
-    <!-- 뒤로가기 버튼 (floating) -->
-    <button id="back-to-services-btn" class="back-to-services-btn" onclick="backToServices()">
-        <i class="fas fa-arrow-left"></i>
-        <span>서비스 선택</span>
+    <!-- 홈 버튼 (floating) -->
+    <button id="back-to-services-btn" class="back-to-services-btn" onclick="backToServices()" title="서비스 선택으로 돌아가기">
+        <i class="fas fa-home"></i>
     </button>
 
     <script>
