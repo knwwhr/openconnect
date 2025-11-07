@@ -39,18 +39,23 @@ WHERE agreed_at > NOW() - INTERVAL '10 minutes';
 -- 4. RLS (Row Level Security) 활성화
 ALTER TABLE consent_records ENABLE ROW LEVEL SECURITY;
 
--- 5. 정책 1: 누구나 동의 기록 삽입 가능 (회원가입 없음)
-CREATE POLICY "Enable insert for all users" ON consent_records
+-- 5. 기존 정책 삭제 (재실행 시 에러 방지)
+DROP POLICY IF EXISTS "Enable insert for all users" ON consent_records;
+DROP POLICY IF EXISTS "Enable read for own email" ON consent_records;
+DROP POLICY IF EXISTS "Allow anonymous inserts" ON consent_records;
+DROP POLICY IF EXISTS "Allow public select" ON consent_records;
+
+-- 6. 정책 1: 익명 사용자도 동의 기록 삽입 가능
+CREATE POLICY "Allow anonymous inserts" ON consent_records
     FOR INSERT
+    TO anon, authenticated
     WITH CHECK (true);
 
--- 6. 정책 2: 본인 이메일 기록만 조회 가능
-CREATE POLICY "Enable read for own email" ON consent_records
+-- 7. 정책 2: 모든 사용자가 조회 가능 (관리 목적)
+CREATE POLICY "Allow public select" ON consent_records
     FOR SELECT
-    USING (
-        email = current_setting('request.jwt.claims', true)::json->>'email'
-        OR current_setting('request.jwt.claims', true) IS NULL
-    );
+    TO anon, authenticated
+    USING (true);
 
 -- 7. 통계 뷰 생성 (관리자용 - 개인정보 제외)
 CREATE OR REPLACE VIEW consent_statistics AS
