@@ -666,7 +666,8 @@
                     />
                     <p class="help-text">
                         개인정보보호법에 따라 동의 기록 증명을 위해 이메일이 필요합니다.
-                        서버에는 이메일과 동의 기록만 저장됩니다.
+                        <strong>서버에는 이메일, 동의 여부, 동의 시각만 저장됩니다.</strong>
+                        서비스 이용 정보는 브라우저에만 저장되며 서버로 전송되지 않습니다.
                     </p>
                 </div>
 
@@ -729,7 +730,7 @@
                     <i class="fas fa-pen-fancy"></i>
                 </div>
                 <h3>자기소개서 툴킷</h3>
-                <p>AI 기반 자소서 작성 도구</p>
+                <p>체계적인 자소서 작성 도구</p>
                 <ul class="service-card-features">
                     <li>✓ 경험 체계화 가이드</li>
                     <li>✓ 강점별 사례 정리</li>
@@ -846,8 +847,7 @@
                         .insert({
                             email: email,
                             agreed: true,
-                            consent_version: '1.0',
-                            user_agent: navigator.userAgent
+                            consent_version: '1.0'
                         })
                         .select();
 
