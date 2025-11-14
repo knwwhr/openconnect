@@ -9,7 +9,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
     color: #333;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     min-height: 100vh;
     font-size: 16px; /* 기본 폰트 크기 증가 */
 }
@@ -91,7 +91,7 @@ main {
 .step-number {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     color: white;
     border-radius: 50%;
     display: flex;
@@ -128,7 +128,7 @@ main {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     color: white;
 }
 
@@ -176,7 +176,7 @@ main {
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     border-radius: 3px;
     transition: width 0.3s ease;
 }
@@ -241,13 +241,13 @@ main {
 }
 
 .option:hover {
-    border-color: #667eea;
+    border-color: #3b82f6;
     transform: translateX(5px);
 }
 
 .option.selected {
-    border-color: #667eea;
-    background: linear-gradient(135deg, #667eea15, #764ba215);
+    border-color: #3b82f6;
+    background: linear-gradient(135deg, #3b82f615, #1d4ed815);
 }
 
 .option.disabled {
@@ -264,7 +264,7 @@ main {
 .scale-rating .scale-option input[type="radio"] {
     display: block;
     margin: 0;
-    accent-color: #667eea;
+    accent-color: #3b82f6;
     width: 16px;
     height: 16px;
     min-width: 44px;
@@ -328,7 +328,7 @@ main {
 .info-tooltip {
     cursor: pointer;
     font-size: 1rem;
-    color: #667eea;
+    color: #3b82f6;
     margin-left: 0.5rem;
     opacity: 1;
     transition: all 0.3s ease;
@@ -340,11 +340,11 @@ main {
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    border: 2px solid #667eea;
+    border: 2px solid #3b82f6;
 }
 
 .info-tooltip:hover {
-    background: #667eea;
+    background: #3b82f6;
     color: white;
     transform: scale(1.1);
 }
@@ -422,7 +422,7 @@ main {
     justify-content: center;
     width: 20px;
     height: 20px;
-    background: #667eea;
+    background: #3b82f6;
     color: white;
     border-radius: 50%;
     cursor: pointer;
@@ -579,7 +579,7 @@ main {
     color: #2c3e50;
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
-    border-bottom: 2px solid #667eea;
+    border-bottom: 2px solid #3b82f6;
     padding-bottom: 0.5rem;
 }
 
@@ -622,7 +622,7 @@ main {
     padding: 0.8rem;
     border-radius: 6px;
     margin-bottom: 1.5rem;
-    border-left: 3px solid #667eea;
+    border-left: 3px solid #3b82f6;
 }
 
 /* Profile Summary */
@@ -652,7 +652,7 @@ main {
     padding: 1.5rem;
     border-radius: 8px;
     margin-bottom: 1rem;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid #3b82f6;
 }
 
 .job-title {
@@ -663,7 +663,7 @@ main {
 }
 
 .job-match {
-    color: #667eea;
+    color: #3b82f6;
     font-weight: 600;
     margin-bottom: 0.5rem;
 }
@@ -681,7 +681,7 @@ main {
     font-size: 0.85rem;
     color: #5a6c7d;
     margin-bottom: 0.5rem;
-    border-left: 3px solid #667eea;
+    border-left: 3px solid #3b82f6;
 }
 
 /* Action Plan */
@@ -743,7 +743,7 @@ main {
 .btn-link {
     display: inline-block;
     padding: 0.4rem 1rem;
-    background: #667eea;
+    background: #3b82f6;
     color: white;
     text-decoration: none;
     border-radius: 6px;
@@ -864,7 +864,7 @@ main {
         transform: rotate(90deg);
         font-size: 1rem;
         margin: 0.25rem 0;
-        color: #667eea;
+        color: #3b82f6;
         align-self: center;
     }
     
@@ -1262,7 +1262,7 @@ main {
     height: 20px;
     border: 3px solid #ecf0f1;
     border-radius: 50%;
-    border-top-color: #667eea;
+    border-top-color: #3b82f6;
     animation: spin 1s linear infinite;
 }
 
@@ -1286,7 +1286,7 @@ main {
     background: #f0f8ff;
     padding: 12px;
     border-radius: 6px;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid #3b82f6;
     color: #2c3e50;
     font-size: 0.9rem;
     line-height: 1.4;
@@ -1294,7 +1294,7 @@ main {
 }
 
 .practical-advice strong {
-    color: #667eea;
+    color: #3b82f6;
 }
 
 /* Validation Popup Styles */
@@ -1686,7 +1686,7 @@ main {
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 20px;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid #3b82f6;
 }
 
 .theory-background h4 {
@@ -1706,7 +1706,7 @@ main {
 }
 
 .selected-type-detail h4 {
-    color: #667eea;
+    color: #3b82f6;
     margin-bottom: 15px;
     font-size: 1.2rem;
     border-bottom: 2px solid #e9ecef;
@@ -1781,7 +1781,7 @@ main {
 }
 
 .type-item strong {
-    color: #667eea;
+    color: #3b82f6;
 }
 
 .note {
@@ -1800,7 +1800,7 @@ main {
 
 .analysis-header h2 {
     font-size: 2rem;
-    color: #667eea;
+    color: #3b82f6;
     margin-bottom: 10px;
     font-weight: 700;
 }
@@ -1836,7 +1836,7 @@ main {
 
 .progress-fill-simple {
     height: 100%;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, #3b82f6, #1d4ed8);
     border-radius: 10px;
     transition: width 0.5s ease;
     box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
@@ -1871,7 +1871,7 @@ main {
 
 .analysis-step.active {
     background: #e8f2ff;
-    border-left-color: #667eea;
+    border-left-color: #3b82f6;
     transform: translateX(5px);
 }
 
@@ -1893,7 +1893,7 @@ main {
 }
 
 .analysis-step.active .step-text {
-    color: #667eea;
+    color: #3b82f6;
 }
 
 .analysis-step.completed .step-text {
@@ -2004,7 +2004,7 @@ main {
     gap: 2rem;
     justify-content: center;
     flex-wrap: wrap;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid #3b82f6;
 }
 
 .guide-item {
@@ -2034,7 +2034,7 @@ main {
 }
 
 .matrix-item:hover {
-    border-color: #667eea;
+    border-color: #3b82f6;
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
 }
 
@@ -2119,7 +2119,7 @@ main {
 .matrix-scale-option input[type="radio"] {
     display: block;
     margin-bottom: 0.25rem;
-    accent-color: #667eea;
+    accent-color: #3b82f6;
     width: 16px;
     height: 16px;
     cursor: pointer;

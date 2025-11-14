@@ -202,7 +202,7 @@
                         
                         <div class="analysis-step" id="step-matching">
                             <div class="step-icon">💼</div>
-                            <div class="step-text">56개 직업과 매칭 중...</div>
+                            <div class="step-text">280개 직무와 매칭 중...</div>
                             <div class="step-status">⏳</div>
                         </div>
                         
@@ -317,6 +317,11 @@
                         if (targetSection) {
                             targetSection.classList.add('active');
                         }
+                    }
+                } else {
+                    // 히스토리 상태가 없으면 부모(홈화면)로 돌아가기
+                    if (window.parent !== window) {
+                        window.parent.postMessage({ action: 'backToServices' }, '*');
                     }
                 }
             });
