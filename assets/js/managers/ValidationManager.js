@@ -19,8 +19,8 @@ class ValidationManager {
                 required: ['industry_interest', 'job_understanding', 'skill_confidence'],
                 validation: {
                     industry_interest: (value) => Array.isArray(value) && value.length > 0 && value.length <= 3,
-                    job_understanding: (value) => typeof value === 'object' && Object.keys(value).length === 10,
-                    skill_confidence: (value) => typeof value === 'object' && Object.keys(value).length === 10
+                    job_understanding: (value) => typeof value === 'object' && Object.keys(value).length >= 1,
+                    skill_confidence: (value) => typeof value === 'object' && Object.keys(value).length >= 1
                 }
             },
             step3: {
@@ -232,14 +232,14 @@ class ValidationManager {
                 break;
                 
             case 'job_understanding':
-                if (typeof value !== 'object' || Object.keys(value).length < 10) {
-                    return { isValid: false, message: '모든 직업에 대한 이해도를 답변해주세요.' };
+                if (typeof value !== 'object' || Object.keys(value).length < 1) {
+                    return { isValid: false, message: '최소 1개 이상의 직무 이해도를 평가해주세요.' };
                 }
                 break;
-                
+
             case 'skill_confidence':
-                if (typeof value !== 'object' || Object.keys(value).length < 10) {
-                    return { isValid: false, message: '모든 스킬에 대한 자신감을 답변해주세요.' };
+                if (typeof value !== 'object' || Object.keys(value).length < 1) {
+                    return { isValid: false, message: '최소 1개 이상의 스킬 자신감을 평가해주세요.' };
                 }
                 break;
                 
