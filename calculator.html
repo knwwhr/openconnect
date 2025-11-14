@@ -1956,7 +1956,6 @@
 
     <div class="footer">
         <p>진단일: ${new Date().toLocaleDateString('ko-KR')}</p>
-        <p>InsideJob - 현직자와 구직자를 연결하는 취업 멘토링 플랫폼</p>
     </div>
 </body>
 </html>`;
@@ -3723,7 +3722,7 @@
 
                         {/* 종합 등급 */}
                         <div className={`card ${gradeInfo.bg} text-center mb-6`}>
-                            <div className={`text-6xl font-bold mb-4 ${gradeInfo.color}`}>
+                            <div className={`font-bold mb-4 ${gradeInfo.color}`} style={{fontSize: '2.625rem'}}>
                                 {gradeInfo.grade}
                             </div>
                             <h3 className="text-2xl font-bold text-gray-900 mb-2">
@@ -3906,7 +3905,7 @@
                                 🔄 다시 진단하기
                             </button>
                             <button
-                                className="btn-primary px-6 py-3 bg-blue-600 hover:bg-blue-700"
+                                className="btn-primary px-6 py-3 bg-green-600 hover:bg-green-700"
                                 onClick={() => window.open('https://insidejob.kr', '_blank')}
                             >
                                 <i className="fas fa-user-tie"></i> 맞춤형 취업컨설팅 받아보기
@@ -3938,7 +3937,6 @@
                                     <div className="text-2xl">🎯</div>
                                     <div>
                                         <h1 className="text-xl font-bold text-gray-900">취업경쟁력 계산기</h1>
-                                        <p className="text-sm text-gray-600">InsideJob - 현직자와 구직자를 연결하는 취업 멘토링 플랫폼</p>
                                     </div>
                                 </div>
                             </div>

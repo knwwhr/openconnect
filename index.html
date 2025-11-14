@@ -545,11 +545,13 @@
 
         <!-- 서비스 소개 -->
         <h1 class="hero-title">InsideJob</h1>
-        <p class="hero-tagline">취업 준비의 모든 것, 하나의 플랫폼에서</p>
+        <p class="hero-tagline" style="margin-bottom: 0.8rem;">
+            취업 준비의 모든 것, 하나의 플랫폼에서<br>
+            커리어진단, 경쟁력 분석, 자기소개서 작성
+        </p>
 
-        <div class="hero-intro">
+        <div class="hero-intro" style="margin-bottom: 1.6rem;">
             <p>
-                커리어진단, 경쟁력 분석, 자기소개서 작성<br>
                 <strong>All in one!</strong>
             </p>
         </div>
@@ -575,7 +577,7 @@
             ✨ 무료로 시작하기
         </button>
 
-        <p class="privacy-notice">
+        <p class="privacy-notice" style="margin-top: 0.8rem;">
             💾 회원가입 없이 바로 이용 가능
         </p>
     </section>
@@ -668,7 +670,7 @@
                 <!-- 버튼 -->
                 <div class="modal-buttons">
                     <button class="btn-cancel" onclick="hideConsentModal()">취소</button>
-                    <button class="btn-submit" id="submit-consent-btn" onclick="submitConsent()">동의하고<br>다음</button>
+                    <button class="btn-submit" id="submit-consent-btn" onclick="submitConsent()">동의</button>
                 </div>
             </div>
         </div>
@@ -730,9 +732,8 @@
 
         <!-- 푸터 (서비스 카드 섹션 내부) -->
         <footer class="footer" style="margin-top: 4rem;">
-            <p class="company-name">© 2025 OpenConnect Co., Ltd. All rights reserved.</p>
+            <p class="company-name">© 2025 OpenConnect Co., Ltd.<br>All rights reserved.</p>
             <p>Powered by (주)오픈커넥트</p>
-            <p>모든 서비스 및 콘텐츠의 권리는 (주)오픈커넥트에 귀속됩니다.</p>
         </footer>
     </section>
 
@@ -874,7 +875,7 @@
             } finally {
                 // 버튼 다시 활성화
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '동의하고<br>다음';
+                submitBtn.innerHTML = '동의';
             }
         }
 
