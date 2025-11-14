@@ -90,7 +90,7 @@ class EventManager {
     }
 
     handleOptionClick(e) {
-        const option = e.target.closest('.option[data-type]');
+        const option = e.target.closest('.option[data-type], .matrix-scale-option[data-type]');
         if (!option) return;
 
         const stepNum = option.dataset.step;
@@ -116,6 +116,15 @@ class EventManager {
                 // Also update the radio button
                 const radio = option.querySelector('input[type="radio"]');
                 if (radio) radio.checked = true;
+                break;
+            case 'job_understanding':
+            case 'skill_confidence':
+                const jobOrSkillId = option.dataset.job || option.dataset.skill;
+                const matrixValue = parseInt(option.dataset.value);
+                this.assessmentManager.optionHandler.saveMatrixResponse(stepNum, questionId, jobOrSkillId, matrixValue, type);
+                // Also update the radio button
+                const matrixRadio = option.querySelector('input[type="radio"]');
+                if (matrixRadio) matrixRadio.checked = true;
                 break;
         }
     }
@@ -203,7 +212,7 @@ class EventManager {
 
     handleChange(e) {
         const target = e.target;
-        
+
         // Handle radio button changes for scale questions
         if (target.type === 'radio' && target.closest('.scale-option')) {
             const scaleOption = target.closest('.scale-option');
@@ -211,8 +220,20 @@ class EventManager {
             const questionId = scaleOption.dataset.question;
             const optionId = scaleOption.dataset.option;
             const value = parseInt(scaleOption.dataset.value);
-            
+
             this.assessmentManager.optionHandler.saveScaleResponse(stepNum, questionId, optionId, value);
+        }
+
+        // Handle radio button changes for matrix questions
+        if (target.type === 'radio' && target.closest('.matrix-scale-option')) {
+            const matrixOption = target.closest('.matrix-scale-option');
+            const stepNum = matrixOption.dataset.step;
+            const questionId = matrixOption.dataset.question;
+            const jobOrSkillId = matrixOption.dataset.job || matrixOption.dataset.skill;
+            const value = parseInt(matrixOption.dataset.value);
+            const type = matrixOption.dataset.type;
+
+            this.assessmentManager.optionHandler.saveMatrixResponse(stepNum, questionId, jobOrSkillId, value, type);
         }
     }
 

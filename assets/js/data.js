@@ -80,7 +80,7 @@ const ASSESSMENT_DATA = {
         ]
     },
 
-    // Step 2: Job Matching Questions  
+    // Step 2: Job Matching Questions
     step2: {
         title: "직무 매칭",
         questions: [
@@ -103,37 +103,111 @@ const ASSESSMENT_DATA = {
                 maxSelections: 3
             },
             {
-                id: "job_understanding",
-                type: "scale",
-                question: "아래 직업들에 대해 얼마나 알고 있나요? (1: 잘 모르겠어요, 5: 잘 알고 있어요)",
-                options: [
-                    { id: "software_dev", text: "개발자", desc: "웹사이트, 앱, 프로그램을 만드는 일", scale: [1, 2, 3, 4, 5] },
-                    { id: "data_analyst", text: "데이터 분석가", desc: "숫자와 데이터를 분석해 인사이트를 찾는 일", scale: [1, 2, 3, 4, 5] },
-                    { id: "marketing_manager", text: "마케터", desc: "제품을 알리고 고객을 모으는 마케팅 전략을 세우는 일", scale: [1, 2, 3, 4, 5] },
-                    { id: "product_manager", text: "기획자", desc: "제품이나 서비스의 방향성을 정하고 개발을 관리하는 일", scale: [1, 2, 3, 4, 5] },
-                    { id: "consultant", text: "컨설턴트", desc: "기업의 문제를 분석하고 해결 방안을 제시하는 일", scale: [1, 2, 3, 4, 5] },
-                    { id: "designer", text: "디자이너", desc: "UI/UX, 그래픽, 제품 등을 시각적으로 디자인하는 일", scale: [1, 2, 3, 4, 5] },
-                    { id: "content_creator", text: "콘텐츠 크리에이터", desc: "영상, 글, 이미지 등 다양한 콘텐츠를 기획하고 제작하는 일", scale: [1, 2, 3, 4, 5] },
-                    { id: "business_analyst", text: "비즈니스 분석가", desc: "비즈니스 프로세스를 분석하고 개선 방안을 찾는 일", scale: [1, 2, 3, 4, 5] },
-                    { id: "financial_analyst", text: "금융 분석가", desc: "투자, 재무, 리스크 등을 분석해 금융 의사결정을 돕는 일", scale: [1, 2, 3, 4, 5] },
-                    { id: "teacher", text: "교육/강사", desc: "학생이나 직장인에게 지식과 스킬을 가르치는 일", scale: [1, 2, 3, 4, 5] }
-                ]
-            },
-            {
-                id: "skill_confidence",
-                type: "scale", 
-                question: "아래 스킬들에 대해 얼마나 자신 있나요? (1: 전혀 자신없어요, 5: 자신있어요)",
-                options: [
-                    { id: "coding", text: "코딩/프로그래밍", desc: "파이썬, 자바스크립트 등으로 코드 작성하기", scale: [1, 2, 3, 4, 5] },
-                    { id: "data_analysis", text: "데이터 분석", desc: "엑셀, SQL, 파이썬으로 데이터 처리하고 인사이트 찾기", scale: [1, 2, 3, 4, 5] },
-                    { id: "design", text: "디자인", desc: "포토샵, 피그마 등으로 시각적인 결과물 만들기", scale: [1, 2, 3, 4, 5] },
-                    { id: "writing", text: "글쓰기", desc: "블로그, 보고서, 기획서 등 목적에 맞는 글 작성하기", scale: [1, 2, 3, 4, 5] },
-                    { id: "presentation", text: "발표하기", desc: "PPT 만들고 사람들 앞에서 설득력 있게 발표하기", scale: [1, 2, 3, 4, 5] },
-                    { id: "planning", text: "기획/계획수립", desc: "목표 설정하고 체계적인 실행 계획 세우기", scale: [1, 2, 3, 4, 5] },
-                    { id: "communication", text: "소통/커뮤니케이션", desc: "다양한 사람들과 원활하게 의사소통하기", scale: [1, 2, 3, 4, 5] },
-                    { id: "creativity", text: "창의성/아이디어", desc: "새롭고 참신한 아이디어를 떠올리고 구현하기", scale: [1, 2, 3, 4, 5] },
-                    { id: "analysis", text: "분석/사고력", desc: "복잡한 정보를 논리적으로 분석하고 결론 도출하기", scale: [1, 2, 3, 4, 5] },
-                    { id: "technical", text: "기술/도구 활용", desc: "새로운 소프트웨어나 디지털 도구 빠르게 배우고 활용하기", scale: [1, 2, 3, 4, 5] }
+                id: "job_skill_matrix",
+                type: "job_skill_matrix",
+                question: "관심 직무와 필요한 스킬을 함께 평가해주세요",
+                subtitle: "선택하신 분야의 직무에 대한 이해도와 관련 스킬 자신감을 평가합니다",
+                items: [
+                    {
+                        job_id: "software_dev",
+                        job_name: "개발자",
+                        job_desc: "웹사이트, 앱, 프로그램을 만드는 일",
+                        industries: ["technology"],
+                        skill_id: "coding",
+                        skill_name: "코딩/프로그래밍",
+                        skill_desc: "파이썬, 자바스크립트 등으로 코드 작성하기",
+                        category_icon: "💻"
+                    },
+                    {
+                        job_id: "data_analyst",
+                        job_name: "데이터 분석가",
+                        job_desc: "숫자와 데이터를 분석해 인사이트를 찾는 일",
+                        industries: ["technology", "business_strategy", "finance"],
+                        skill_id: "data_analysis",
+                        skill_name: "데이터 분석",
+                        skill_desc: "엑셀, SQL, 파이썬으로 데이터 처리하기",
+                        category_icon: "📊"
+                    },
+                    {
+                        job_id: "marketing_manager",
+                        job_name: "마케터",
+                        job_desc: "제품을 알리고 고객을 모으는 마케팅 전략을 세우는 일",
+                        industries: ["marketing_sales", "business_strategy"],
+                        skill_id: "communication",
+                        skill_name: "소통/커뮤니케이션",
+                        skill_desc: "다양한 사람들과 원활하게 의사소통하기",
+                        category_icon: "📢"
+                    },
+                    {
+                        job_id: "product_manager",
+                        job_name: "기획자",
+                        job_desc: "제품이나 서비스의 방향성을 정하고 개발을 관리하는 일",
+                        industries: ["business_strategy", "technology"],
+                        skill_id: "planning",
+                        skill_name: "기획/계획수립",
+                        skill_desc: "목표 설정하고 체계적인 실행 계획 세우기",
+                        category_icon: "📋"
+                    },
+                    {
+                        job_id: "consultant",
+                        job_name: "컨설턴트",
+                        job_desc: "기업의 문제를 분석하고 해결 방안을 제시하는 일",
+                        industries: ["business_strategy"],
+                        skill_id: "analysis",
+                        skill_name: "분석/사고력",
+                        skill_desc: "복잡한 정보를 논리적으로 분석하고 결론 도출하기",
+                        category_icon: "🔍"
+                    },
+                    {
+                        job_id: "designer",
+                        job_name: "디자이너",
+                        job_desc: "UI/UX, 그래픽, 제품 등을 시각적으로 디자인하는 일",
+                        industries: ["creative_design", "technology"],
+                        skill_id: "design",
+                        skill_name: "디자인",
+                        skill_desc: "포토샵, 피그마 등으로 시각적인 결과물 만들기",
+                        category_icon: "🎨"
+                    },
+                    {
+                        job_id: "content_creator",
+                        job_name: "콘텐츠 크리에이터",
+                        job_desc: "영상, 글, 이미지 등 다양한 콘텐츠를 기획하고 제작하는 일",
+                        industries: ["creative_design", "media_entertainment"],
+                        skill_id: "creativity",
+                        skill_name: "창의성/아이디어",
+                        skill_desc: "새롭고 참신한 아이디어를 떠올리고 구현하기",
+                        category_icon: "✨"
+                    },
+                    {
+                        job_id: "business_analyst",
+                        job_name: "비즈니스 분석가",
+                        job_desc: "비즈니스 프로세스를 분석하고 개선 방안을 찾는 일",
+                        industries: ["business_strategy", "finance"],
+                        skill_id: "analysis",
+                        skill_name: "분석/사고력",
+                        skill_desc: "복잡한 정보를 논리적으로 분석하고 결론 도출하기",
+                        category_icon: "📈"
+                    },
+                    {
+                        job_id: "financial_analyst",
+                        job_name: "금융 분석가",
+                        job_desc: "투자, 재무, 리스크 등을 분석해 금융 의사결정을 돕는 일",
+                        industries: ["finance"],
+                        skill_id: "data_analysis",
+                        skill_name: "데이터 분석",
+                        skill_desc: "엑셀, SQL로 금융 데이터 처리하기",
+                        category_icon: "💰"
+                    },
+                    {
+                        job_id: "teacher",
+                        job_name: "교육/강사",
+                        job_desc: "학생이나 직장인에게 지식과 스킬을 가르치는 일",
+                        industries: ["education_research"],
+                        skill_id: "presentation",
+                        skill_name: "발표하기",
+                        skill_desc: "PPT 만들고 사람들 앞에서 설득력 있게 발표하기",
+                        category_icon: "👨‍🏫"
+                    }
                 ]
             }
         ]

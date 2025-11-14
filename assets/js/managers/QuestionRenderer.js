@@ -24,12 +24,16 @@ class QuestionRenderer {
             case 'ranking':
                 optionsHTML = this.createRankingOptions(question, stepNum);
                 break;
+            case 'job_skill_matrix':
+                optionsHTML = this.createJobSkillMatrixOptions(question, stepNum);
+                break;
             default:
                 optionsHTML = '<p>Unknown question type</p>';
         }
 
         questionDiv.innerHTML = `
             <h3>${question.question}</h3>
+            ${question.subtitle ? `<p class="question-subtitle">${question.subtitle}</p>` : ''}
             <div class="question-options">
                 ${optionsHTML}
             </div>
@@ -149,6 +153,102 @@ class QuestionRenderer {
                         </div>
                     `).join('')}
                 </div>
+            </div>
+        `;
+    }
+
+    createJobSkillMatrixOptions(question, stepNum) {
+        // 스마트 필터링: 1단계에서 선택한 관심 분야 가져오기
+        let selectedIndustries = [];
+        if (window.stateManager) {
+            const industryAnswer = window.stateManager.getAnswer('industry_interest');
+            if (industryAnswer && industryAnswer.values) {
+                selectedIndustries = industryAnswer.values;
+            }
+        }
+
+        // 관심 분야에 해당하는 항목만 필터링
+        let filteredItems = question.items;
+        if (selectedIndustries.length > 0) {
+            filteredItems = question.items.filter(item =>
+                item.industries.some(industry => selectedIndustries.includes(industry))
+            );
+        }
+
+        // 필터링 결과가 없으면 모든 항목 표시
+        if (filteredItems.length === 0) {
+            filteredItems = question.items;
+        }
+
+        return `
+            <div class="job-skill-matrix-container">
+                <div class="matrix-guide">
+                    <div class="guide-item">
+                        <span class="guide-label">직무 이해도</span>
+                        <span class="guide-desc">이 직업에 대해 얼마나 알고 있나요?</span>
+                    </div>
+                    <div class="guide-item">
+                        <span class="guide-label">스킬 자신감</span>
+                        <span class="guide-desc">관련 스킬에 얼마나 자신 있나요?</span>
+                    </div>
+                </div>
+
+                ${filteredItems.map((item, index) => `
+                    <div class="matrix-item" data-item-index="${index}">
+                        <div class="matrix-item-header">
+                            <span class="category-icon">${item.category_icon}</span>
+                            <div class="job-info">
+                                <h4 class="job-name">${item.job_name}</h4>
+                                <p class="job-desc">${item.job_desc}</p>
+                            </div>
+                        </div>
+
+                        <div class="matrix-ratings">
+                            <div class="rating-section">
+                                <label class="rating-label">직무 이해도</label>
+                                <div class="rating-scale">
+                                    ${[1, 2, 3, 4, 5].map(value => `
+                                        <div class="matrix-scale-option"
+                                             data-step="${stepNum}"
+                                             data-question="${question.id}"
+                                             data-job="${item.job_id}"
+                                             data-value="${value}"
+                                             data-type="job_understanding">
+                                            <input type="radio"
+                                                   name="${item.job_id}_understanding"
+                                                   value="${value}"
+                                                   id="${item.job_id}_understanding_${value}">
+                                            <label for="${item.job_id}_understanding_${value}" class="scale-radio-label">${value}</label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <div class="rating-section">
+                                <label class="rating-label">
+                                    ${item.skill_name}
+                                    <span class="skill-hint">${item.skill_desc}</span>
+                                </label>
+                                <div class="rating-scale">
+                                    ${[1, 2, 3, 4, 5].map(value => `
+                                        <div class="matrix-scale-option"
+                                             data-step="${stepNum}"
+                                             data-question="${question.id}"
+                                             data-skill="${item.skill_id}"
+                                             data-value="${value}"
+                                             data-type="skill_confidence">
+                                            <input type="radio"
+                                                   name="${item.skill_id}_confidence_${index}"
+                                                   value="${value}"
+                                                   id="${item.skill_id}_confidence_${index}_${value}">
+                                            <label for="${item.skill_id}_confidence_${index}_${value}" class="scale-radio-label">${value}</label>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
             </div>
         `;
     }

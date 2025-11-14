@@ -193,6 +193,36 @@
         // 취업경쟁력 계산기 - 3단계 객관식 평가 시스템
         const CareerCompetitivenessCalculator = ({ savedCalculations = [], onCalculationComplete, setCurrentView, currentUser, showNotification, setAuthMode, setShowSaveResultSignupModal }) => {
             const [calculatorStep, setCalculatorStep] = useState(1);
+
+            // 히스토리 관리 - 단계 변경 시 히스토리 추가
+            useEffect(() => {
+                if (calculatorStep === 1) {
+                    // 첫 단계는 replace로 (중복 방지)
+                    history.replaceState({ step: 1 }, '', location.href);
+                } else {
+                    // 이후 단계는 push로
+                    history.pushState({ step: calculatorStep }, '', `#step${calculatorStep}`);
+                }
+            }, [calculatorStep]);
+
+            // 뒤로가기 이벤트 처리
+            useEffect(() => {
+                const handlePopState = (event) => {
+                    if (event.state && event.state.step) {
+                        // 히스토리에서 단계 정보가 있으면 해당 단계로 이동
+                        setCalculatorStep(event.state.step);
+                    } else {
+                        // 히스토리가 없으면 부모 페이지(서비스 선택)로 이동
+                        if (window.parent !== window) {
+                            window.parent.postMessage({ action: 'backToServices' }, '*');
+                        }
+                    }
+                };
+
+                window.addEventListener('popstate', handlePopState);
+                return () => window.removeEventListener('popstate', handlePopState);
+            }, []);
+
             const [formData, setFormData] = useState({
                 // 1단계: 기본정보 및 배경 (35점)
                 gender: '',

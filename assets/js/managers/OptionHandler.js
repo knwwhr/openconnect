@@ -191,13 +191,37 @@ class OptionHandler {
     saveScaleResponse(stepNum, questionId, optionId, value) {
         const currentResponse = this.assessmentManager.stateManager.getResponse(stepNum, questionId) || {};
         currentResponse[optionId] = value;
-        
+
         // Analytics: 스케일 응답 이벤트
         if (window.analyticsManager) {
             window.analyticsManager.trackQuestionAnswer(questionId + '_' + optionId, 'scale', value);
         }
-        
+
         this.assessmentManager.stateManager.saveResponse(stepNum, questionId, currentResponse);
+    }
+
+    saveMatrixResponse(stepNum, questionId, jobOrSkillId, value, type) {
+        // job_skill_matrix 응답은 job_understanding과 skill_confidence로 분리하여 저장
+        let targetQuestionId;
+        if (type === 'job_understanding') {
+            targetQuestionId = 'job_understanding';
+        } else if (type === 'skill_confidence') {
+            targetQuestionId = 'skill_confidence';
+        } else {
+            return; // 알 수 없는 타입
+        }
+
+        // 기존 응답 가져오기 또는 새 객체 생성
+        const currentResponse = this.assessmentManager.stateManager.getResponse(stepNum, targetQuestionId) || {};
+        currentResponse[jobOrSkillId] = value;
+
+        // Analytics: 매트릭스 응답 이벤트
+        if (window.analyticsManager) {
+            window.analyticsManager.trackQuestionAnswer(targetQuestionId + '_' + jobOrSkillId, 'matrix', value);
+        }
+
+        // 별도의 질문 ID로 저장 (기존 로직과 호환성 유지)
+        this.assessmentManager.stateManager.saveResponse(stepNum, targetQuestionId, currentResponse);
     }
 }
 

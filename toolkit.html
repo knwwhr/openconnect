@@ -1083,10 +1083,24 @@
             // 입력 필드 변경 시 진행률 업데이트
             document.addEventListener('input', updateProgress);
             document.addEventListener('change', updateProgress);
-            
+
             // 초기 경험 하나 추가
             addExperience();
         });
+
+        // 히스토리 네비게이션 - 뒤로가기 시 부모 페이지로
+        (function() {
+            // 초기 히스토리 상태 설정
+            history.replaceState({ page: 'toolkit' }, '', location.href);
+
+            // 뒤로가기 이벤트 처리
+            window.addEventListener('popstate', function(event) {
+                // 부모 페이지(index.html)로 메시지 전송
+                if (window.parent !== window) {
+                    window.parent.postMessage({ action: 'backToServices' }, '*');
+                }
+            });
+        })();
     </script>
 
     <!-- 푸터 추가 -->

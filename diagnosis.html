@@ -289,5 +289,43 @@
     <script src="assets/js/assessment.js"></script>
     <script src="assets/js/results.js"></script>
     <script src="assets/js/main.js"></script>
+
+    <!-- 히스토리 네비게이션 -->
+    <script>
+        (function() {
+            let currentSection = 'landing';
+
+            // 섹션 전환 추적
+            const originalShowSection = window.assessmentManager?.showSection;
+            if (originalShowSection) {
+                window.assessmentManager.showSection = function(sectionId) {
+                    currentSection = sectionId;
+                    history.pushState({ section: sectionId }, '', `#${sectionId}`);
+                    return originalShowSection.call(this, sectionId);
+                };
+            }
+
+            // 뒤로가기/앞으로가기 처리
+            window.addEventListener('popstate', function(event) {
+                if (event.state && event.state.section) {
+                    currentSection = event.state.section;
+                    if (window.assessmentManager) {
+                        // assessmentManager의 원본 showSection 호출 (히스토리 추가 안 함)
+                        const sections = document.querySelectorAll('.section');
+                        sections.forEach(s => s.classList.remove('active'));
+                        const targetSection = document.getElementById(event.state.section);
+                        if (targetSection) {
+                            targetSection.classList.add('active');
+                        }
+                    }
+                }
+            });
+
+            // 초기 상태 설정
+            setTimeout(() => {
+                history.replaceState({ section: 'landing' }, '', '#landing');
+            }, 100);
+        })();
+    </script>
 </body>
 </html>
