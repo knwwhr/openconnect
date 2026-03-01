@@ -750,7 +750,7 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwZG5hbXVlY3dnb3dkd3F4dWdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNjAwMzUsImV4cCI6MjA4NzkzNjAzNX0.lVj1vrrw9Uv_0xqckmFo8PvsK38neJ4yh0XgyxX00_g';
 
         // Supabase 클라이언트 초기화
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         // ===================================
         // 페이지 로드 시 동의 여부 확인
@@ -826,8 +826,8 @@
 
             try {
                 // 1. Supabase에 동의 기록 저장 (법적 의무)
-                if (supabase) {
-                    const { data, error } = await supabase
+                if (supabaseClient) {
+                    const { data, error } = await supabaseClient
                         .from('consent_records')
                         .insert({
                             email: email,
