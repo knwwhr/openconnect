@@ -4,8 +4,8 @@
  */
 
 // Supabase 설정
-const SUPABASE_URL = 'https://xvchfclpzxvuvtjmeuwp.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh2Y2hmY2xwenh2dXZ0am1ldXdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1NzQxMTAsImV4cCI6MjA3MTE1MDExMH0.ZunyePxPTmf2vNCjQrqvjEoiXAVJKKx-nRqrsRBRxNA';
+const SUPABASE_URL = 'https://lpdnamuecwgowdwqxugg.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxwZG5hbXVlY3dnb3dkd3F4dWdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNjAwMzUsImV4cCI6MjA4NzkzNjAzNX0.lVj1vrrw9Uv_0xqckmFo8PvsK38neJ4yh0XgyxX00_g';
 
 // Supabase 클라이언트 초기화
 let supabaseClient = null;
