@@ -33,10 +33,7 @@ class CareerAssessmentApp {
             }
 
             // Initialize managers
-            console.log('Initializing AssessmentManager...');
             this.assessmentManager = new AssessmentManager();
-            
-            console.log('Initializing ResultsManager...');
             this.resultsManager = new ResultsManager(this.assessmentManager);
             
             // Create a clean namespace for backward compatibility (if needed)
@@ -57,7 +54,7 @@ class CareerAssessmentApp {
 
             // Previous session restoration removed - always start fresh
 
-            console.log('Career Assessment App initialized successfully');
+            // initialized
         } catch (error) {
             console.error('Failed to initialize app:', error);
             this.showError('애플리케이션을 초기화하는 중 오류가 발생했습니다: ' + error.message);
@@ -114,8 +111,6 @@ class CareerAssessmentApp {
     }
 
     addLoadingStates() {
-        // 완전히 비활성화 - 사용자 경험 개선을 위해
-        console.log('[App] Loading states disabled for better UX');
         return;
     }
 
@@ -273,8 +268,7 @@ class CareerAssessmentApp {
     }
 
     showLoading(message = '처리 중...') {
-        console.trace('[Main] showLoading called:', message);
-        return; // 완전히 비활성화
+        return;
         
         const existingLoader = document.querySelector('.app-loader');
         if (existingLoader) return;
@@ -343,7 +337,6 @@ class CareerAssessmentApp {
     // Analytics and tracking methods (for future implementation)
     trackEvent(eventName, properties = {}) {
         // Future: Send to analytics service
-        console.log('Analytics Event:', eventName, properties);
         
         // For now, just log to localStorage for development
         const events = JSON.parse(localStorage.getItem('analyticsEvents') || '[]');
@@ -433,13 +426,9 @@ if (document.readyState === 'loading') {
 // Add development helpers
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
     document.addEventListener('DOMContentLoaded', () => {
-        console.log('Development mode - Debug helpers available');
-        console.log('Use app.getDebugInfo() or app.exportDebugData() for debugging');
-        
-        // Add debug panel
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.shiftKey && e.key === 'D') {
-                console.log('Debug Info:', app.getDebugInfo());
+                console.table(app.getDebugInfo());
             }
         });
     });
@@ -457,7 +446,7 @@ if ('serviceWorker' in navigator) {
 function startAssessment() {
     // Wait for app to be initialized
     if (!app && !window.CareerApp) {
-        console.warn('App not initialized yet, retrying...');
+        // App not initialized yet, retrying
         setTimeout(startAssessment, 100);
         return;
     }

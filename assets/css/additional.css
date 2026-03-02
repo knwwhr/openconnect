@@ -928,6 +928,11 @@
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
 }
 
+.ranking-option.selected:hover {
+    border-color: #2563eb;
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.25);
+}
+
 .rank-number {
     position: absolute;
     right: 0.75rem;
@@ -1264,12 +1269,23 @@ input[type="checkbox"] {
     border: 0;
 }
 
-/* Focus Styles */
-.option:focus,
-.btn-primary:focus,
-.btn-secondary:focus {
+/* Focus Styles - focus-visible for keyboard only */
+.option:focus-visible,
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.ranking-option:focus-visible,
+.scale-option:focus-visible,
+.btn-primary-large:focus-visible,
+.btn-link:focus-visible {
     outline: 2px solid #3b82f6;
     outline-offset: 2px;
+}
+
+/* Remove outline on mouse click */
+.option:focus:not(:focus-visible),
+.btn-primary:focus:not(:focus-visible),
+.btn-secondary:focus:not(:focus-visible) {
+    outline: none;
 }
 
 /* Print Styles */

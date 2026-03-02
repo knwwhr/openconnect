@@ -39,6 +39,13 @@ class UIManager {
             }
         });
         
+        // 외부 클릭으로 닫기
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) {
+                this.closePopup(popup);
+            }
+        });
+
         document.body.appendChild(popup);
         this.activePopups.add(popup);
     }
@@ -256,7 +263,7 @@ class UIManager {
                 <div class="tooltip-content">
                     <div class="tooltip-header">
                         <h3>${tooltip.title}</h3>
-                        <button class="tooltip-close">✕</button>
+                        <button class="tooltip-close" aria-label="닫기">✕</button>
                     </div>
                     <div class="tooltip-body">
                         ${tooltip.content}
@@ -289,7 +296,7 @@ class UIManager {
             <div class="tooltip-popup-content">
                 <div class="tooltip-popup-header">
                     <h4>도움말</h4>
-                    <button class="tooltip-popup-close">✕</button>
+                    <button class="tooltip-popup-close" aria-label="닫기">✕</button>
                 </div>
                 <div class="tooltip-popup-body">
                     <p>${tooltipText}</p>
@@ -316,9 +323,22 @@ class UIManager {
 
     closePopup(popup) {
         if (popup && popup.parentNode) {
-            popup.remove();
-            this.activePopups.delete(popup);
+            popup.style.opacity = '0';
+            popup.style.transition = 'opacity 0.2s ease';
+            setTimeout(() => {
+                if (popup.parentNode) popup.remove();
+                this.activePopups.delete(popup);
+            }, 200);
         }
+    }
+
+    // 팝업에 외부 클릭 닫기 + 등록 공통 처리
+    registerPopup(popup) {
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) this.closePopup(popup);
+        });
+        document.body.appendChild(popup);
+        this.activePopups.add(popup);
     }
 
     removeExistingPopups() {
@@ -372,7 +392,7 @@ class UIManager {
             <div class="notification-content">
                 <span class="notification-icon">${icon}</span>
                 <span class="notification-message">${message}</span>
-                <button class="notification-close">✕</button>
+                <button class="notification-close" aria-label="닫기">✕</button>
             </div>
         `;
         

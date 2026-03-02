@@ -5,6 +5,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
@@ -144,6 +148,11 @@ main {
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
 }
 
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
 .btn-secondary {
     background: #ecf0f1;
     color: #2c3e50;
@@ -151,6 +160,11 @@ main {
 
 .btn-secondary:hover {
     background: #d5dbdb;
+}
+
+.btn-secondary:active {
+    background: #c5cbcb;
+    transform: scale(0.98);
 }
 
 .btn-secondary:disabled,
@@ -260,6 +274,11 @@ main {
     background: linear-gradient(135deg, #3b82f615, #1d4ed815);
 }
 
+.option.selected:hover {
+    border-color: #2563eb;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
 .option.disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -306,6 +325,19 @@ main {
     flex-direction: column;
     align-items: center;
     min-height: 80px;
+    padding: 4px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.scale-option:hover {
+    background-color: #f0f7ff;
+}
+
+.scale-option:has(input:checked) {
+    background-color: #eff6ff;
+    box-shadow: 0 0 0 2px #3b82f620;
+    border-radius: 8px;
 }
 
 /* .scale-option input 스타일은 위의 .scale-rating .scale-option input으로 통합됨 */
