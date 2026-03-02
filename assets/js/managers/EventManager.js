@@ -42,7 +42,7 @@ class EventManager {
         }
         
         // Handle option selections
-        if (target.closest('.option[data-type]')) {
+        if (target.closest('.option[data-type]') || target.closest('.matrix-scale-option[data-type]') || target.closest('.scale-option[data-type]')) {
             this.handleOptionClick(e);
             return;
         }
@@ -90,7 +90,7 @@ class EventManager {
     }
 
     handleOptionClick(e) {
-        const option = e.target.closest('.option[data-type], .matrix-scale-option[data-type]');
+        const option = e.target.closest('.option[data-type], .matrix-scale-option[data-type], .scale-option[data-type]');
         if (!option) return;
 
         const stepNum = option.dataset.step;
@@ -146,11 +146,8 @@ class EventManager {
 
     handlePrevButton(e) {
         const buttonId = e.target.id;
-        console.log('Previous button clicked:', buttonId); // 디버깅용
-        
+
         if (buttonId === 'results-prev') {
-            // 결과 화면에서 3단계로 돌아가기
-            console.log('Going back to step 3 from results'); // 디버깅용
             this.assessmentManager.showSection('step3');
             this.assessmentManager.loadStep(3);
             return;

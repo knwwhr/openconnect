@@ -2039,6 +2039,7 @@ main {
     font-size: 0.95rem;
     color: #6c757d;
     margin: -0.5rem 0 1.5rem 0;
+    max-width: 400px;
 }
 
 .job-skill-matrix-container {
@@ -2171,16 +2172,21 @@ main {
     display: block;
     margin-bottom: 0.25rem;
     accent-color: #3b82f6;
-    width: 16px;
-    height: 16px;
+    width: 22px;
+    height: 22px;
     cursor: pointer;
 }
 
 .matrix-scale-option .scale-radio-label {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 600;
     color: #495057;
     cursor: pointer;
+}
+
+.matrix-scale-option:has(input:checked) {
+    background: #eff6ff;
+    border-radius: 8px;
 }
 
 /* Mobile Responsive for Matrix */
@@ -2231,11 +2237,11 @@ main {
     }
     
     .matrix-scale-option input[type="radio"] {
-        width: 18px;
-        height: 18px;
+        width: 24px;
+        height: 24px;
         min-width: 44px;
         min-height: 44px;
-        transform: scale(0.75);
+        transform: scale(0.85);
     }
     
     .matrix-scale-option .scale-radio-label {
