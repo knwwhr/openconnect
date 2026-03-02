@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        html { scroll-behavior: smooth; }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             font-size: 16px;
@@ -146,6 +148,16 @@
             box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
         }
 
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
         .btn:disabled {
             background: #9ca3af;
             cursor: not-allowed;
@@ -174,7 +186,7 @@
             padding: 1rem;
             margin-bottom: 1rem;
             position: relative;
-            background: #f9fafb;
+            background: #f8fafc;
         }
 
         .experience-header {
@@ -254,6 +266,17 @@
         .strength-item input[type="checkbox"] {
             width: auto;
             margin: 0;
+            cursor: pointer;
+            accent-color: #3b82f6;
+        }
+
+        .strength-item {
+            cursor: pointer;
+        }
+
+        input:focus-visible, textarea:focus-visible, select:focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 1px;
         }
 
         .strength-examples {
@@ -397,6 +420,21 @@
         }
 
         .autosave-indicator.show { opacity: 1; }
+
+        /* Print 스타일 */
+        @media print {
+            .progress-bar, .save-section, .autosave-indicator, .toast-notification { display: none; }
+            .section { box-shadow: none; break-inside: avoid; }
+            body { background: white; }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
 
         .progress-bar {
             position: fixed;
@@ -581,7 +619,7 @@
                 5. 교육·자격·수상·어학
             </h2>
             <div id="certificateContainer">
-                <!-- 자격증/교육 항목들이 여기에 추가됩니다 -->
+                <p id="certEmptyMsg" style="color:#9ca3af;font-size:0.85rem;text-align:center;padding:1rem 0;">아래 '항목 추가' 버튼을 눌러 자격증, 교육, 어학 등을 입력하세요.</p>
             </div>
             <button type="button" class="btn btn-secondary" onclick="addCertificate()">
                 <i class="fas fa-plus"></i> 항목 추가
@@ -645,7 +683,7 @@
             experienceDiv.id = `experience-${experienceCount}`;
             
             experienceDiv.innerHTML = `
-                <button type="button" class="remove-experience" onclick="removeExperience(${experienceCount})">
+                <button type="button" class="remove-experience" aria-label="경험 삭제" onclick="removeExperience(${experienceCount})">
                     <i class="fas fa-times"></i>
                 </button>
                 <div class="experience-header">
@@ -746,6 +784,8 @@
         function addCertificate() {
             certificateCount++;
             const container = document.getElementById('certificateContainer');
+            var emptyMsg = document.getElementById('certEmptyMsg');
+            if (emptyMsg) emptyMsg.remove();
             const certDiv = document.createElement('div');
             certDiv.className = 'form-row';
             certDiv.style.position = 'relative';
@@ -773,7 +813,7 @@
                     <input type="text" placeholder="점수, 등급 등">
                 </div>
                 <div class="form-group" style="flex:0 0 auto;display:flex;align-items:flex-end;">
-                    <button type="button" class="remove-cert" onclick="this.closest('.form-row').remove(); updateProgress();">
+                    <button type="button" class="remove-cert" aria-label="자격증 삭제" onclick="this.closest('.form-row').remove(); updateProgress();">
                         <i class="fas fa-times"></i> 삭제
                     </button>
                 </div>
@@ -1188,6 +1228,8 @@
             if (existing) existing.remove();
             var toast = document.createElement('div');
             toast.className = 'toast-notification';
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
             toast.textContent = message;
             document.body.appendChild(toast);
             requestAnimationFrame(function() { toast.classList.add('show'); });
