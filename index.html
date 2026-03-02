@@ -23,6 +23,25 @@
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
     <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-deeper: #1d4ed8;
+            --secondary: #8b5cf6;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --dark-mid: #1e293b;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-700: #334155;
+            --gray-900: #1e293b;
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -31,7 +50,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Malgun Gothic', sans-serif;
-            background-color: #f8fafc;
+            background-color: var(--gray-50);
             line-height: 1.6;
         }
 
@@ -44,7 +63,7 @@
             height: 100vh;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
+            transition: opacity 0.4s var(--ease), visibility 0.4s var(--ease);
             z-index: 1;
         }
 
@@ -55,7 +74,7 @@
 
         /* 랜딩 페이지 */
         .hero-section {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-mid) 50%, var(--gray-700) 100%);
             color: white;
             display: flex;
             flex-direction: column;
@@ -91,78 +110,119 @@
         }
 
         .hero-logo {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 1.6rem auto;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.2rem auto;
             display: block;
             filter: brightness(0) invert(1) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3)) drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+            animation: logoFadeIn 0.8s var(--ease);
+        }
+
+        @keyframes logoFadeIn {
+            from { opacity: 0; transform: scale(0.9) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .hero-brand {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 1rem;
         }
 
         .hero-title {
-            font-size: 2.4rem;
-            font-weight: 700;
-            margin-bottom: 0.8rem;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 0.6rem;
             text-align: center;
+            line-height: 1.3;
+            animation: heroSlideUp 0.6s var(--ease) 0.2s both;
         }
 
         .hero-tagline {
-            font-size: 1.2rem;
-            opacity: 0.95;
-            margin-bottom: 1.6rem;
+            font-size: 1.05rem;
+            opacity: 0.85;
+            margin-bottom: 2rem;
             text-align: center;
+            max-width: 480px;
+            line-height: 1.7;
+            animation: heroSlideUp 0.6s var(--ease) 0.35s both;
         }
 
-        .hero-intro {
-            max-width: 480px;
-            font-size: 0.88rem;
-            line-height: 1.8;
-            opacity: 0.9;
-            margin: 0 auto 2.4rem auto;
-            text-align: center;
+        @keyframes heroSlideUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .value-points {
             display: flex;
-            gap: 1.6rem;
+            gap: 2rem;
             margin-bottom: 2.4rem;
             flex-wrap: wrap;
             justify-content: center;
+            animation: heroSlideUp 0.6s var(--ease) 0.5s both;
         }
 
         .value-point {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.08);
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            min-width: 140px;
+            transition: background 0.3s var(--ease);
+        }
+
+        .value-point:hover {
+            background: rgba(255,255,255,0.12);
         }
 
         .value-point i {
-            font-size: 1.6rem;
+            font-size: 1.4rem;
+            color: var(--primary);
+        }
+
+        .value-point span {
+            font-size: 0.85rem;
+            font-weight: 500;
         }
 
         .cta-button {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 0.96rem 2.4rem;
+            padding: 1rem 2.8rem;
             border-radius: 40px;
-            font-size: 0.96rem;
+            font-size: 1rem;
             font-weight: 600;
             border: none;
             cursor: pointer;
             box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
-            transition: all 0.3s;
+            transition: all 0.3s var(--ease);
+            position: relative;
+            overflow: hidden;
+            animation: heroSlideUp 0.6s var(--ease) 0.65s both;
         }
 
         .cta-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 15px 40px rgba(59, 130, 246, 0.6);
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-deeper) 100%);
+        }
+
+        .cta-button:active {
+            transform: translateY(-1px);
         }
 
         .privacy-notice {
-            margin-top: 1.6rem;
-            font-size: 0.72rem;
-            opacity: 0.8;
+            margin-top: 1.2rem;
+            font-size: 0.75rem;
+            opacity: 0.6;
+            animation: heroSlideUp 0.6s var(--ease) 0.75s both;
         }
 
         /* 개인정보 동의 모달 */
@@ -348,7 +408,7 @@
         /* 서비스 카드 섹션 */
         .service-cards-section {
             padding: 3rem 1rem;
-            background: #f8fafc;
+            background: linear-gradient(180deg, var(--gray-50) 0%, white 100%);
             overflow-y: auto;
             z-index: 20;
         }
@@ -359,94 +419,172 @@
 
         .service-cards-header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
         }
 
         .service-cards-header h2 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 1rem;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 0.6rem;
         }
 
         .service-cards-header p {
-            font-size: 1.2rem;
-            color: #64748b;
+            font-size: 1.05rem;
+            color: var(--gray-500);
         }
 
         .service-cards-grid {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
             padding: 0 1rem;
         }
 
         .service-card {
             background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
+            border-radius: 16px;
+            padding: 2rem 1.8rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+            transition: all 0.4s var(--ease);
             cursor: pointer;
             text-align: center;
+            border: 1px solid var(--gray-200);
+            position: relative;
+            overflow: hidden;
         }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transition: transform 0.4s var(--ease);
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card:nth-child(1)::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        .service-card:nth-child(2)::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+        .service-card:nth-child(3)::before { background: linear-gradient(90deg, #22c55e, #4ade80); }
 
         .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+            border-color: transparent;
         }
 
-        .service-card-icon {
-            font-size: 4rem;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1.5rem;
-        }
-
-        .service-card h3 {
-            font-size: 1.8rem;
+        .service-card-step {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
             font-weight: 700;
-            color: #1e293b;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
             margin-bottom: 1rem;
         }
 
+        .service-card:nth-child(1) .service-card-step { background: #eff6ff; color: #3b82f6; }
+        .service-card:nth-child(2) .service-card-step { background: #f5f3ff; color: #8b5cf6; }
+        .service-card:nth-child(3) .service-card-step { background: #f0fdf4; color: #22c55e; }
+
+        .service-card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card:nth-child(1) .service-card-icon {
+            background: linear-gradient(135deg, #3b82f6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .service-card:nth-child(2) .service-card-icon {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .service-card:nth-child(3) .service-card-icon {
+            background: linear-gradient(135deg, #22c55e, #4ade80);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .service-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.6rem;
+        }
+
         .service-card p {
-            font-size: 1rem;
-            color: #64748b;
+            font-size: 0.92rem;
+            color: var(--gray-500);
             line-height: 1.6;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
         }
 
         .service-card-features {
             text-align: left;
             margin-bottom: 1.5rem;
+            list-style: none;
+            padding: 0;
         }
 
         .service-card-features li {
-            color: #64748b;
+            color: var(--gray-500);
             margin-bottom: 0.5rem;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
         }
 
         .service-card-button {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            padding: 0.75rem 2rem;
-            border-radius: 50px;
+            width: 100%;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
             border: none;
             font-weight: 600;
+            font-size: 0.92rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s var(--ease);
+        }
+
+        .service-card:nth-child(1) .service-card-button {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+
+        .service-card:nth-child(2) .service-card-button {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+
+        .service-card:nth-child(3) .service-card-button {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
         }
 
         .service-card-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            filter: brightness(1.05);
         }
 
         /* 서비스 실행 섹션 */
@@ -467,21 +605,23 @@
         /* 홈 버튼 (서비스 실행 중에만 표시) */
         .back-to-services-btn {
             position: fixed;
-            top: 1.5rem;
-            left: 1.5rem;
-            background: rgba(59, 130, 246, 0.95);
+            top: 1.2rem;
+            left: 1.2rem;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             display: none;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            transition: all 0.3s var(--ease);
         }
 
         .back-to-services-btn.visible {
@@ -489,51 +629,87 @@
         }
 
         .back-to-services-btn:hover {
-            background: rgba(37, 99, 235, 0.95);
-            transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+            background: rgba(15, 23, 42, 0.95);
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
         }
 
         .back-to-services-btn i {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
         }
 
         /* 푸터 */
         .footer {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            padding: 2rem 1rem;
+            padding: 1.5rem 1rem;
             text-align: center;
-            border-top: 1px solid #e5e7eb;
+            border-top: 1px solid var(--gray-200);
         }
 
         .footer p {
-            color: #64748b;
-            font-size: 0.9rem;
-            margin-bottom: 0.3rem;
+            color: var(--gray-400);
+            font-size: 0.8rem;
+            margin-bottom: 0.2rem;
         }
 
         .footer .company-name {
             font-weight: 600;
-            color: #475569;
-            font-size: 1rem;
+            color: var(--gray-500);
+            font-size: 0.85rem;
         }
 
-        .report-btn-container {
+        /* 통합 리포트 프로그레스 & 버튼 */
+        .report-progress-container {
+            max-width: 600px;
+            margin: 2.5rem auto 0;
+            padding: 1.5rem 2rem;
+            background: linear-gradient(135deg, #f5f3ff 0%, #eff6ff 100%);
+            border-radius: 16px;
+            border: 1px solid rgba(139, 92, 246, 0.15);
             text-align: center;
-            margin-top: 2rem;
+        }
+
+        .report-progress-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .report-progress-steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .report-progress-step {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.82rem;
+            color: var(--gray-400);
+        }
+
+        .report-progress-step.completed {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .report-progress-step i {
+            font-size: 0.9rem;
         }
 
         .report-btn {
-            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            background: linear-gradient(135deg, var(--secondary) 0%, #6d28d9 100%);
             color: white;
-            padding: 1rem 2.5rem;
-            border-radius: 40px;
-            font-size: 1rem;
+            padding: 0.85rem 2.5rem;
+            border-radius: 10px;
+            font-size: 0.95rem;
             font-weight: 600;
             border: none;
             cursor: pointer;
-            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
-            transition: all 0.3s;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+            transition: all 0.3s var(--ease);
             display: none;
         }
 
@@ -542,14 +718,22 @@
         }
 
         .report-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+        }
+
+        .report-btn:disabled {
+            background: var(--gray-200);
+            color: var(--gray-400);
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
         }
 
         /* 통합 리포트 섹션 */
         .report-section {
             padding: 2rem 1rem;
-            background: #f8fafc;
+            background: var(--gray-50);
             overflow-y: auto;
             z-index: 35;
         }
@@ -568,13 +752,14 @@
             border-radius: 16px;
             padding: 2rem;
             margin-bottom: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--gray-200);
         }
 
         .report-card h3 {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            color: #1e293b;
+            color: var(--dark);
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
@@ -582,36 +767,42 @@
         }
 
         .report-bar {
-            height: 24px;
-            background: #e2e8f0;
-            border-radius: 12px;
+            height: 20px;
+            background: var(--gray-100);
+            border-radius: 10px;
             overflow: hidden;
             margin-bottom: 0.5rem;
         }
 
         .report-bar-fill {
             height: 100%;
-            border-radius: 12px;
-            transition: width 0.8s ease;
+            border-radius: 10px;
+            transition: width 1s var(--ease);
         }
 
         .action-plan-card {
-            border-left: 4px solid #3b82f6;
+            border-left: 4px solid var(--primary);
             padding: 1rem 1.5rem;
-            background: #f8fafc;
+            background: var(--gray-50);
             border-radius: 0 12px 12px 0;
             margin-bottom: 0.75rem;
+            transition: border-color 0.3s var(--ease);
+        }
+
+        .action-plan-card:hover {
+            border-left-color: var(--secondary);
         }
 
         .action-plan-card h4 {
             font-weight: 600;
-            color: #1e293b;
+            color: var(--dark);
             margin-bottom: 0.3rem;
         }
 
         .action-plan-card p {
-            font-size: 0.9rem;
-            color: #64748b;
+            font-size: 0.88rem;
+            color: var(--gray-500);
+            line-height: 1.6;
         }
 
         /* 반응형 */
@@ -621,20 +812,94 @@
             }
 
             .hero-tagline {
-                font-size: 0.96rem;
+                font-size: 0.92rem;
             }
 
             .value-points {
                 flex-direction: column;
-                gap: 0.8rem;
+                gap: 0.6rem;
+            }
+
+            .value-point {
+                padding: 0.8rem 1rem;
+                min-width: auto;
+            }
+
+            .service-cards-section {
+                padding: 2rem 0.75rem;
             }
 
             .service-cards-header h2 {
-                font-size: 1.8rem;
+                font-size: 1.5rem;
+            }
+
+            .service-cards-header p {
+                font-size: 0.92rem;
             }
 
             .service-cards-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .service-card {
+                padding: 1.5rem 1.2rem;
+            }
+
+            .service-card h3 {
+                font-size: 1.2rem;
+            }
+
+            .service-card-icon {
+                font-size: 2.4rem;
+            }
+
+            .report-progress-container {
+                margin: 2rem 0.5rem 0;
+                padding: 1.2rem 1rem;
+            }
+
+            .report-progress-steps {
+                gap: 1rem;
+            }
+
+            .report-card {
+                padding: 1.5rem 1.2rem;
+            }
+
+            .back-to-services-btn {
+                width: 44px;
+                height: 44px;
+                top: 1rem;
+                left: 1rem;
+            }
+
+            .privacy-modal {
+                border-radius: 16px;
+            }
+
+            .modal-header {
+                padding: 1.5rem;
+                border-radius: 16px 16px 0 0;
+            }
+
+            .modal-body {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .hero-title {
+                font-size: 1.4rem;
+            }
+
+            .service-cards-grid {
+                padding: 0 0.5rem;
+            }
+
+            .report-progress-steps {
+                flex-direction: column;
+                gap: 0.5rem;
             }
         }
     </style>
@@ -784,6 +1049,7 @@
         <div class="service-cards-grid">
             <!-- 카드 1: 커리어 진단 -->
             <div class="service-card" onclick="loadService('diagnosis')">
+                <div class="service-card-step">Step 1</div>
                 <div class="service-card-icon">
                     <i class="fas fa-chart-line"></i>
                 </div>
@@ -799,6 +1065,7 @@
 
             <!-- 카드 2: 경쟁력 계산 -->
             <div class="service-card" onclick="loadService('calculator')">
+                <div class="service-card-step">Step 2</div>
                 <div class="service-card-icon">
                     <i class="fas fa-calculator"></i>
                 </div>
@@ -814,6 +1081,7 @@
 
             <!-- 카드 3: 자기소개서 -->
             <div class="service-card" onclick="loadService('toolkit')">
+                <div class="service-card-step">Step 3</div>
                 <div class="service-card-icon">
                     <i class="fas fa-pen-fancy"></i>
                 </div>
@@ -828,10 +1096,19 @@
             </div>
         </div>
 
-        <!-- 통합 리포트 버튼 -->
-        <div class="report-btn-container" style="text-align:center;margin-top:2rem;">
-            <button id="show-report-btn" class="report-btn" onclick="showIntegratedReport()">
-                <i class="fas fa-file-alt" style="margin-right:0.5rem;"></i>통합 리포트 보기
+        <!-- 통합 리포트 프로그레스 -->
+        <div class="report-progress-container" id="report-progress">
+            <div class="report-progress-title">통합 리포트</div>
+            <div class="report-progress-steps">
+                <span class="report-progress-step" id="report-step-diagnosis">
+                    <i class="far fa-circle"></i> 커리어 진단
+                </span>
+                <span class="report-progress-step" id="report-step-calculator">
+                    <i class="far fa-circle"></i> 경쟁력 계산
+                </span>
+            </div>
+            <button id="show-report-btn" class="report-btn" onclick="showIntegratedReport()" disabled>
+                <i class="fas fa-file-alt" style="margin-right:0.5rem;"></i>두 서비스 완료 시 리포트 생성
             </button>
         </div>
 
@@ -1007,10 +1284,37 @@
             var hasDiagnosis = !!localStorage.getItem('insidejob_diagnosis_result');
             var hasCalculator = !!localStorage.getItem('insidejob_calculation_result');
 
+            // 프로그레스 스텝 업데이트
+            var stepDiag = document.getElementById('report-step-diagnosis');
+            var stepCalc = document.getElementById('report-step-calculator');
+            if (stepDiag) {
+                if (hasDiagnosis) {
+                    stepDiag.classList.add('completed');
+                    stepDiag.innerHTML = '<i class="fas fa-check-circle"></i> 커리어 진단';
+                } else {
+                    stepDiag.classList.remove('completed');
+                    stepDiag.innerHTML = '<i class="far fa-circle"></i> 커리어 진단';
+                }
+            }
+            if (stepCalc) {
+                if (hasCalculator) {
+                    stepCalc.classList.add('completed');
+                    stepCalc.innerHTML = '<i class="fas fa-check-circle"></i> 경쟁력 계산';
+                } else {
+                    stepCalc.classList.remove('completed');
+                    stepCalc.innerHTML = '<i class="far fa-circle"></i> 경쟁력 계산';
+                }
+            }
+
+            // 버튼 상태 업데이트
             if (hasDiagnosis && hasCalculator) {
                 reportBtn.classList.add('visible');
+                reportBtn.disabled = false;
+                reportBtn.innerHTML = '<i class="fas fa-file-alt" style="margin-right:0.5rem;"></i>통합 리포트 보기';
             } else {
                 reportBtn.classList.remove('visible');
+                reportBtn.disabled = true;
+                reportBtn.innerHTML = '<i class="fas fa-file-alt" style="margin-right:0.5rem;"></i>두 서비스 완료 시 리포트 생성';
             }
         }
 
