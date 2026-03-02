@@ -1539,6 +1539,8 @@
 
             var labels = ['현실형(R)','탐구형(I)','예술형(A)','사회형(S)','진취형(E)','관습형(C)'];
             var data = [scores.R||0, scores.I||0, scores.A||0, scores.S||0, scores.E||0, scores.C||0];
+            var maxVal = Math.max.apply(null, data);
+            var chartMax = Math.ceil(maxVal / 5) * 5 || 5;
 
             new Chart(canvas, {
                 type: 'radar',
@@ -1559,8 +1561,8 @@
                     scales: {
                         r: {
                             beginAtZero: true,
-                            max: 5,
-                            ticks: { stepSize: 1 }
+                            max: chartMax,
+                            ticks: { stepSize: Math.ceil(chartMax / 5) }
                         }
                     },
                     plugins: {
