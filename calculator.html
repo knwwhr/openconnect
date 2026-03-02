@@ -223,6 +223,38 @@
                 return () => window.removeEventListener('popstate', handlePopState);
             }, []);
 
+            // 진단 결과 자동 반영용 알림
+            const [diagnosisNotice, setDiagnosisNotice] = useState(null);
+
+            // 진단 결과에서 추천 직무 자동 반영
+            useEffect(() => {
+                try {
+                    const diagRaw = localStorage.getItem('insidejob_diagnosis_result');
+                    if (!diagRaw) return;
+                    const diagData = JSON.parse(diagRaw);
+                    if (!diagData || !diagData.topJobs || diagData.topJobs.length === 0) return;
+
+                    const topJob = diagData.topJobs[0];
+                    const jobId = topJob.jobId;
+                    const jobTitle = topJob.title || jobId;
+
+                    // authorizedJobDatabase에서 해당 jobId가 있는지 확인
+                    const allJobs = Object.values(authorizedJobDatabase)
+                        .filter(v => Array.isArray(v))
+                        .flat();
+
+                    if (allJobs.includes(jobId)) {
+                        setFormData(prev => ({ ...prev, targetJob: jobId }));
+                        setDiagnosisNotice('진단 결과에서 추천된 \'' + jobTitle + '\'이(가) 자동 선택되었습니다');
+                    } else {
+                        setFormData(prev => ({ ...prev, targetJob: 'custom', customJob: jobTitle }));
+                        setDiagnosisNotice('진단 결과에서 추천된 \'' + jobTitle + '\'이(가) 자동 입력되었습니다');
+                    }
+                } catch(e) {
+                    console.warn('진단 결과 자동 반영 실패:', e);
+                }
+            }, []);
+
             const [formData, setFormData] = useState({
                 // 1단계: 기본정보 및 배경 (35점)
                 gender: '',
@@ -1824,6 +1856,14 @@
 
                 setCalculatorResult(result);
                 setCalculatorStep(4);
+
+                // localStorage에 자동 저장 + 부모 프레임에 완료 알림
+                try {
+                    localStorage.setItem('insidejob_calculation_result', JSON.stringify(result));
+                    if (window.parent !== window) {
+                        window.parent.postMessage({ action: 'calculatorComplete' }, '*');
+                    }
+                } catch(e) { console.warn('Calculator bridge save failed:', e); }
             };
 
             // 계산결과 저장 함수 
@@ -1974,6 +2014,116 @@
                 showNotification?.('결과가 HTML 파일로 다운로드되었습니다!', 'success');
             };
 
+            // 경쟁력 카드 공유 기능 (Canvas API)
+            const shareCompetitivenessCard = async () => {
+                if (!calculatorResult) return;
+
+                const canvas = document.createElement('canvas');
+                canvas.width = 600;
+                canvas.height = 400;
+                const ctx = canvas.getContext('2d');
+
+                // 네이비 그라데이션 배경
+                const grad = ctx.createLinearGradient(0, 0, 600, 400);
+                grad.addColorStop(0, '#0f172a');
+                grad.addColorStop(1, '#1e40af');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, 600, 400);
+
+                // 장식 원
+                ctx.beginPath();
+                ctx.arc(500, 80, 120, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(59, 130, 246, 0.15)';
+                ctx.fill();
+
+                // 직무명
+                const selectedJobDisplay = formData.targetJob === 'custom' ? formData.customJob : getJobDisplayName(formData.targetJob);
+                ctx.fillStyle = 'rgba(255,255,255,0.8)';
+                ctx.font = '16px -apple-system, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(selectedJobDisplay + ' 취업 경쟁력', 300, 50);
+
+                // 점수 (큰 폰트)
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 72px -apple-system, sans-serif';
+                ctx.fillText(calculatorResult.totalScore + '점', 300, 130);
+
+                // 등급
+                ctx.font = '24px -apple-system, sans-serif';
+                ctx.fillStyle = calculatorResult.gradeInfo.color.includes('green') ? '#4ade80' :
+                               calculatorResult.gradeInfo.color.includes('yellow') ? '#facc15' : '#fb923c';
+                ctx.fillText(calculatorResult.gradeInfo.grade, 300, 170);
+
+                // 3개 영역별 바 차트
+                const breakdown = calculatorResult.scoreBreakdown;
+                const keys = Object.keys(breakdown);
+                const barColors = ['#3b82f6', '#8b5cf6', '#22c55e'];
+                const barY = 210;
+
+                keys.forEach((key, i) => {
+                    const bd = breakdown[key];
+                    const y = barY + i * 55;
+                    const pct = (bd.score / bd.max);
+
+                    // 라벨
+                    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+                    ctx.font = '14px -apple-system, sans-serif';
+                    ctx.textAlign = 'left';
+                    ctx.fillText(key, 60, y);
+
+                    // 점수
+                    ctx.textAlign = 'right';
+                    ctx.fillText(bd.score + '/' + bd.max, 540, y);
+
+                    // 바 배경
+                    ctx.fillStyle = 'rgba(255,255,255,0.1)';
+                    ctx.beginPath();
+                    ctx.roundRect(60, y + 8, 480, 16, 8);
+                    ctx.fill();
+
+                    // 바 값
+                    ctx.fillStyle = barColors[i];
+                    ctx.beginPath();
+                    ctx.roundRect(60, y + 8, 480 * pct, 16, 8);
+                    ctx.fill();
+                });
+
+                // InsideJob 워터마크
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.font = '12px -apple-system, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText('InsideJob - 취업 경쟁력 계산기', 300, 385);
+
+                // Web Share API 또는 PNG 다운로드
+                canvas.toBlob(async (blob) => {
+                    if (navigator.share && navigator.canShare) {
+                        try {
+                            const file = new File([blob], 'competitiveness-card.png', { type: 'image/png' });
+                            if (navigator.canShare({ files: [file] })) {
+                                await navigator.share({
+                                    title: '나의 취업 경쟁력 점수',
+                                    text: '취업 경쟁력 ' + calculatorResult.totalScore + '점! InsideJob에서 확인하세요.',
+                                    files: [file]
+                                });
+                                return;
+                            }
+                        } catch(e) {
+                            if (e.name === 'AbortError') return;
+                        }
+                    }
+                    // 폴백: PNG 다운로드
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = '취업경쟁력카드_' + calculatorResult.totalScore + '점.png';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+                    showNotification?.('경쟁력 카드가 다운로드되었습니다!', 'success');
+                }, 'image/png');
+            };
+
             // 1단계: 기본자격 평가 UI
             if (calculatorStep === 1) {
                 return (
@@ -1991,6 +2141,14 @@
                                 </div>
                             </div>
                         </div>
+
+                        {diagnosisNotice && (
+                            <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm flex items-center gap-2">
+                                <i className="fas fa-check-circle"></i>
+                                <span>{diagnosisNotice}</span>
+                                <button onClick={() => setDiagnosisNotice(null)} className="ml-auto text-green-600 hover:text-green-800">&times;</button>
+                            </div>
+                        )}
 
                         <div className="card">
                             <h3 className="text-xl font-bold text-gray-900 mb-6">기본정보 및 배경</h3>
@@ -3881,6 +4039,12 @@
                                 onClick={downloadResultAsHTML}
                             >
                                 <i className="fas fa-download"></i> 파일(html)로 저장하기
+                            </button>
+                            <button
+                                className="btn-primary px-6 py-3 bg-indigo-600 hover:bg-indigo-700"
+                                onClick={shareCompetitivenessCard}
+                            >
+                                <i className="fas fa-camera"></i> 경쟁력 카드 공유하기
                             </button>
                             <button
                                 className="btn-primary px-6 py-3 bg-gray-500 hover:bg-gray-600"

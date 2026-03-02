@@ -221,6 +221,21 @@ class AssessmentManager {
             // PDF 다운로드를 위해 결과 저장
             this.lastCalculatedResults = results;
             this.lastActionPlan = actionPlan;
+
+            // 크로스 서비스 데이터 브릿지
+            try {
+                localStorage.setItem('insidejob_diagnosis_result', JSON.stringify({
+                    riasecScores: results.riasecScores,
+                    topJobs: results.topJobs.map(j => ({
+                        jobId: j.jobId, title: j.title, score: j.score
+                    })),
+                    timestamp: new Date().toISOString()
+                }));
+                // 부모 프레임에 완료 알림
+                if (window.parent !== window) {
+                    window.parent.postMessage({ action: 'diagnosisComplete' }, '*');
+                }
+            } catch(e) { console.warn('Bridge save failed:', e); }
         } catch (error) {
             console.error('Error calculating results:', error);
             console.error('Error details:', error.message);

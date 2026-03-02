@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InsideJob - 통합 커리어 진단 플랫폼</title>
-    <meta name="description" content="커리어 진단 → 경쟁력 계산 → 자기소개서 작성을 하나의 플랫폼에서 해결하세요.">
+    <title>InsideJob - 취업 경쟁력 점수</title>
+    <meta name="description" content="나의 취업 경쟁력은 몇 점? 직무 진단부터 경쟁력 점수, 점수 올리기까지.">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,6 +14,13 @@
 
     <!-- Supabase CDN -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+    <!-- Chart.js (RIASEC 레이더 차트) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+
+    <!-- html2canvas + jsPDF (PDF 다운로드) -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
     <style>
         * {
@@ -511,6 +518,221 @@
             font-size: 1rem;
         }
 
+        /* 스텝 플로우 UI */
+        .step-flow-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .step-flow-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            position: relative;
+        }
+
+        .step-flow-left {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .step-flow-number {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: white;
+            background: #3b82f6;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .step-flow-number.completed {
+            background: #22c55e;
+        }
+
+        .step-flow-line {
+            width: 3px;
+            height: 2rem;
+            background: #e2e8f0;
+            margin: 0.5rem 0;
+        }
+
+        .step-flow-line.completed {
+            background: #22c55e;
+        }
+
+        .step-flow-card {
+            flex: 1;
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .step-flow-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            border-color: #3b82f6;
+        }
+
+        .step-flow-card.completed {
+            border-color: #22c55e;
+        }
+
+        .step-flow-card h3 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-flow-card p {
+            font-size: 0.95rem;
+            color: #64748b;
+            margin-bottom: 0.75rem;
+        }
+
+        .step-flow-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .step-flow-status.available {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .step-flow-status.completed {
+            background: #f0fdf4;
+            color: #16a34a;
+        }
+
+        .skip-link {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            text-decoration: underline;
+            cursor: pointer;
+            margin-left: 0.5rem;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .skip-link:hover {
+            color: #64748b;
+        }
+
+        .report-btn-container {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .report-btn {
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 40px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s;
+            display: none;
+        }
+
+        .report-btn.visible {
+            display: inline-block;
+        }
+
+        .report-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(139, 92, 246, 0.5);
+        }
+
+        /* 통합 리포트 섹션 */
+        .report-section {
+            padding: 2rem 1rem;
+            background: #f8fafc;
+            overflow-y: auto;
+            z-index: 25;
+        }
+
+        .report-section.active {
+            z-index: 65;
+        }
+
+        .report-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .report-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .report-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .report-bar {
+            height: 24px;
+            background: #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .report-bar-fill {
+            height: 100%;
+            border-radius: 12px;
+            transition: width 0.8s ease;
+        }
+
+        .action-plan-card {
+            border-left: 4px solid #3b82f6;
+            padding: 1rem 1.5rem;
+            background: #f8fafc;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .action-plan-card h4 {
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.3rem;
+        }
+
+        .action-plan-card p {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
         /* 반응형 */
         @media (max-width: 768px) {
             .hero-title {
@@ -533,6 +755,24 @@
             .service-cards-grid {
                 grid-template-columns: 1fr;
             }
+
+            .step-flow-item {
+                gap: 1rem;
+            }
+
+            .step-flow-number {
+                width: 44px;
+                height: 44px;
+                font-size: 1.1rem;
+            }
+
+            .step-flow-card h3 {
+                font-size: 1.1rem;
+            }
+
+            .step-flow-card p {
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
@@ -544,31 +784,30 @@
         <img src="logo.png" alt="InsideJob Logo" class="hero-logo" />
 
         <!-- 서비스 소개 -->
-        <h1 class="hero-title">인사이드잡</h1>
+        <h1 class="hero-title">취업 경쟁력은 몇 점?</h1>
         <p class="hero-tagline" style="margin-bottom: 0.8rem;">
-            취업 준비의 모든 것, All in One!<br>
-            커리어진단, 경쟁력 분석, 자기소개서 작성
+            나의 취업 경쟁력을 측정하고, 점수를 올리세요
         </p>
 
-        <!-- 3가지 핵심 가치 -->
+        <!-- 3단계 스텝 -->
         <div class="value-points">
             <div class="value-point">
-                <i class="fas fa-chart-line"></i>
-                <span>316개 직무 맞춤 진단</span>
+                <i class="fas fa-search"></i>
+                <span>Step 1: 직무 찾기</span>
             </div>
             <div class="value-point">
                 <i class="fas fa-trophy"></i>
-                <span>데이터 기반 경쟁력 분석</span>
+                <span>Step 2: 점수 확인</span>
             </div>
             <div class="value-point">
                 <i class="fas fa-rocket"></i>
-                <span>실행 가능한 가이드</span>
+                <span>Step 3: 점수 올리기</span>
             </div>
         </div>
 
         <!-- CTA 버튼 -->
         <button id="start-service-btn" class="cta-button" onclick="showConsentModal()">
-            ✨ 무료로 시작하기
+            내 점수 확인하기
         </button>
 
         <p class="privacy-notice" style="margin-top: 0.8rem;">
@@ -671,63 +910,65 @@
         </div>
     </div>
 
-    <!-- 3. 서비스 카드 섹션 -->
+    <!-- 3. 서비스 카드 섹션 (스텝 플로우) -->
     <section id="service-cards-section" class="page-section service-cards-section">
         <div class="service-cards-header">
-            <h2>원하는 서비스를 선택하세요</h2>
-            <p>3가지 서비스를 모두 이용하실 수 있습니다</p>
+            <h2>취업 경쟁력 높이기 3단계</h2>
+            <p>순서대로 진행하거나, 원하는 단계부터 시작하세요</p>
         </div>
 
-        <div class="service-cards-grid">
-            <!-- 카드 1: 커리어 진단 -->
-            <div class="service-card" onclick="loadService('diagnosis')">
-                <div class="service-card-icon">
-                    <i class="fas fa-chart-line"></i>
+        <div class="step-flow-container">
+            <!-- Step 1: 직무 찾기 -->
+            <div class="step-flow-item" id="step-flow-1">
+                <div class="step-flow-left">
+                    <div class="step-flow-number" id="step-num-1">1</div>
+                    <div class="step-flow-line" id="step-line-1"></div>
                 </div>
-                <h3>커리어 진단</h3>
-                <p>강점 발견 → 직무 매칭 → 준비 가이드</p>
-                <ul class="service-card-features">
-                    <li>✓ 6가지 RIASEC 성향 분석</li>
-                    <li>✓ 316개 직무 맞춤 추천</li>
-                    <li>✓ 실행 가능한 커리어 로드맵</li>
-                </ul>
-                <button class="service-card-button">진단 시작하기</button>
+                <div class="step-flow-card" id="step-card-1" onclick="loadService('diagnosis')">
+                    <h3><i class="fas fa-search" style="color:#3b82f6;margin-right:0.5rem;"></i>나에게 맞는 직무 찾기</h3>
+                    <p>RIASEC 성향 분석으로 316개 직무 중 나에게 맞는 직무를 추천받으세요</p>
+                    <span class="step-flow-status available" id="step-status-1">시작하기</span>
+                    <button class="skip-link" onclick="event.stopPropagation(); skipToStep(2);">건너뛰기</button>
+                </div>
             </div>
 
-            <!-- 카드 2: 경쟁력 계산 -->
-            <div class="service-card" onclick="loadService('calculator')">
-                <div class="service-card-icon">
-                    <i class="fas fa-calculator"></i>
+            <!-- Step 2: 점수 확인 -->
+            <div class="step-flow-item" id="step-flow-2">
+                <div class="step-flow-left">
+                    <div class="step-flow-number" id="step-num-2">2</div>
+                    <div class="step-flow-line" id="step-line-2"></div>
                 </div>
-                <h3>경쟁력 계산</h3>
-                <p>나의 취업 경쟁력 점수 확인</p>
-                <ul class="service-card-features">
-                    <li>✓ 3단계 100점 만점 평가</li>
-                    <li>✓ 직무별 맞춤 경쟁력 분석</li>
-                    <li>✓ 부족한 역량 개선 가이드</li>
-                </ul>
-                <button class="service-card-button">계산 시작하기</button>
+                <div class="step-flow-card" id="step-card-2" onclick="loadService('calculator')">
+                    <h3><i class="fas fa-calculator" style="color:#3b82f6;margin-right:0.5rem;"></i>취업 경쟁력 점수 확인</h3>
+                    <p>316개 직무별 취업 경쟁력을 100점으로 정량화. 3단계 평가로 정확한 점수를 확인하세요</p>
+                    <span class="step-flow-status available" id="step-status-2">시작하기</span>
+                    <button class="skip-link" onclick="event.stopPropagation(); skipToStep(3);">건너뛰기</button>
+                </div>
             </div>
 
-            <!-- 카드 3: 자기소개서 -->
-            <div class="service-card" onclick="loadService('toolkit')">
-                <div class="service-card-icon">
-                    <i class="fas fa-pen-fancy"></i>
+            <!-- Step 3: 점수 올리기 -->
+            <div class="step-flow-item" id="step-flow-3">
+                <div class="step-flow-left">
+                    <div class="step-flow-number" id="step-num-3">3</div>
                 </div>
-                <h3>자기소개서 툴킷</h3>
-                <p>체계적인 자소서 작성 도구</p>
-                <ul class="service-card-features">
-                    <li>✓ 경험 체계화 가이드</li>
-                    <li>✓ 강점별 사례 정리</li>
-                    <li>✓ 파일로 저장 및 내보내기</li>
-                </ul>
-                <button class="service-card-button">작성 시작하기</button>
+                <div class="step-flow-card" id="step-card-3" onclick="loadService('toolkit')">
+                    <h3><i class="fas fa-pen-fancy" style="color:#3b82f6;margin-right:0.5rem;"></i>점수 올리기: 자소서 작성</h3>
+                    <p>체계적인 자기소개서 작성으로 취업 경쟁력을 높이세요</p>
+                    <span class="step-flow-status available" id="step-status-3">시작하기</span>
+                </div>
+            </div>
+
+            <!-- 통합 리포트 버튼 -->
+            <div class="report-btn-container">
+                <button id="show-report-btn" class="report-btn" onclick="showIntegratedReport()">
+                    <i class="fas fa-file-alt" style="margin-right:0.5rem;"></i>통합 리포트 보기
+                </button>
             </div>
         </div>
 
         <!-- 푸터 (서비스 카드 섹션 내부) -->
         <footer class="footer" style="margin-top: 4rem;">
-            <p class="company-name">© 2025 OpenConnect Co., Ltd.<br>All rights reserved.</p>
+            <p class="company-name">&copy; 2025 OpenConnect Co., Ltd.<br>All rights reserved.</p>
             <p>Powered by (주)오픈커넥트</p>
         </footer>
     </section>
@@ -735,6 +976,13 @@
     <!-- 4. 서비스 실행 섹션 (iframe) -->
     <section id="service-iframe-section" class="page-section service-iframe-section">
         <iframe id="service-iframe" src="" title="InsideJob Service"></iframe>
+    </section>
+
+    <!-- 5. 통합 리포트 섹션 -->
+    <section id="report-section" class="page-section report-section">
+        <div class="report-container" id="report-content">
+            <!-- 동적으로 생성됨 -->
+        </div>
     </section>
 
     <!-- 홈 버튼 (floating) -->
@@ -881,10 +1129,84 @@
         }
 
         // ===================================
+        // 스텝 플로우 상태 관리
+        // ===================================
+        function getStepStates() {
+            return {
+                diagnosis: !!localStorage.getItem('insidejob_diagnosis_result'),
+                calculator: !!localStorage.getItem('insidejob_calculation_result')
+            };
+        }
+
+        function updateStepFlowUI() {
+            const states = getStepStates();
+
+            // Step 1: 진단
+            setStepState(1, states.diagnosis ? 'completed' : 'available');
+
+            // Step 2: 계산기
+            setStepState(2, states.calculator ? 'completed' : 'available');
+
+            // Step 3: 자소서 (항상 available)
+            setStepState(3, 'available');
+
+            // Step 1 연결선
+            var line1 = document.getElementById('step-line-1');
+            if (line1) {
+                line1.classList.toggle('completed', states.diagnosis);
+            }
+            // Step 2 연결선
+            var line2 = document.getElementById('step-line-2');
+            if (line2) {
+                line2.classList.toggle('completed', states.calculator);
+            }
+
+            // 통합 리포트 버튼: 진단+계산기 둘 다 완료 시 표시
+            var reportBtn = document.getElementById('show-report-btn');
+            if (reportBtn) {
+                if (states.diagnosis && states.calculator) {
+                    reportBtn.classList.add('visible');
+                } else {
+                    reportBtn.classList.remove('visible');
+                }
+            }
+        }
+
+        function setStepState(stepId, state) {
+            var num = document.getElementById('step-num-' + stepId);
+            var card = document.getElementById('step-card-' + stepId);
+            var status = document.getElementById('step-status-' + stepId);
+            if (!num || !card || !status) return;
+
+            if (state === 'completed') {
+                num.classList.add('completed');
+                num.innerHTML = '<i class="fas fa-check"></i>';
+                card.classList.add('completed');
+                status.className = 'step-flow-status completed';
+                status.textContent = '완료';
+            } else {
+                num.classList.remove('completed');
+                num.textContent = stepId;
+                card.classList.remove('completed');
+                status.className = 'step-flow-status available';
+                status.textContent = '시작하기';
+            }
+        }
+
+        function skipToStep(n) {
+            if (n === 2) {
+                loadService('calculator');
+            } else if (n === 3) {
+                loadService('toolkit');
+            }
+        }
+
+        // ===================================
         // 서비스 카드 섹션 표시
         // ===================================
         function showServiceCards() {
             showSection('service-cards-section');
+            updateStepFlowUI();
         }
 
         // ===================================
@@ -949,13 +1271,19 @@
                 }
             });
 
-            // iframe에서 postMessage로 전달되는 뒤로가기 요청 처리
+            // iframe에서 postMessage로 전달되는 요청 처리
             window.addEventListener('message', function(event) {
                 // 보안: 같은 origin에서만 메시지 수신
                 if (event.origin !== window.location.origin) return;
 
                 if (event.data && event.data.action === 'backToServices') {
                     backToServices();
+                }
+                if (event.data && event.data.action === 'diagnosisComplete') {
+                    updateStepFlowUI();
+                }
+                if (event.data && event.data.action === 'calculatorComplete') {
+                    updateStepFlowUI();
                 }
             });
         }
@@ -971,6 +1299,194 @@
         // 콘솔에서 resetConsent() 호출하면 동의 기록 삭제 가능
         console.log('디버그: resetConsent() 호출하면 동의 기록이 삭제됩니다.');
 
+        // ===================================
+        // 통합 리포트
+        // ===================================
+        function showIntegratedReport() {
+            var diagData = null;
+            var calcData = null;
+            try {
+                diagData = JSON.parse(localStorage.getItem('insidejob_diagnosis_result'));
+                calcData = JSON.parse(localStorage.getItem('insidejob_calculation_result'));
+            } catch(e) {}
+
+            if (!diagData && !calcData) {
+                alert('리포트를 생성하려면 최소 1개 이상의 서비스를 완료해주세요.');
+                return;
+            }
+
+            var container = document.getElementById('report-content');
+            var html = '';
+
+            // 리포트 헤더
+            html += '<div style="text-align:center;margin-bottom:2rem;">';
+            html += '<h2 style="font-size:2rem;font-weight:700;color:#1e293b;margin-bottom:0.5rem;">통합 취업 경쟁력 리포트</h2>';
+            html += '<p style="color:#64748b;">InsideJob 분석 결과 종합</p>';
+            html += '<button onclick="backFromReport()" style="margin-top:1rem;background:#64748b;color:white;border:none;padding:0.5rem 1.5rem;border-radius:20px;cursor:pointer;font-size:0.9rem;">← 돌아가기</button>';
+            html += '</div>';
+
+            // 1. 추천 직무 & 이유 (진단 데이터)
+            if (diagData && diagData.topJobs && diagData.topJobs.length > 0) {
+                html += '<div class="report-card">';
+                html += '<h3><i class="fas fa-briefcase" style="color:#3b82f6;"></i> 추천 직무 TOP 5</h3>';
+                var topJobs = diagData.topJobs.slice(0, 5);
+                topJobs.forEach(function(job, i) {
+                    var pct = Math.round((job.score || 0) * 100);
+                    html += '<div style="display:flex;align-items:center;gap:1rem;margin-bottom:0.75rem;">';
+                    html += '<span style="background:#3b82f6;color:white;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;flex-shrink:0;">' + (i+1) + '</span>';
+                    html += '<div style="flex:1;">';
+                    html += '<div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><strong>' + (job.title || job.jobId) + '</strong><span style="color:#3b82f6;font-weight:600;">' + pct + '%</span></div>';
+                    html += '<div class="report-bar"><div class="report-bar-fill" style="width:' + pct + '%;background:linear-gradient(90deg,#3b82f6,#8b5cf6);"></div></div>';
+                    html += '</div></div>';
+                });
+                html += '</div>';
+            }
+
+            // 2. RIASEC 6축 분석 (진단 데이터)
+            if (diagData && diagData.riasecScores) {
+                html += '<div class="report-card">';
+                html += '<h3><i class="fas fa-chart-radar" style="color:#8b5cf6;"></i> RIASEC 성향 분석</h3>';
+                html += '<div style="max-width:400px;margin:0 auto;"><canvas id="report-radar-chart"></canvas></div>';
+                var labelMap = {R:'현실형(R)',I:'탐구형(I)',A:'예술형(A)',S:'사회형(S)',E:'진취형(E)',C:'관습형(C)'};
+                html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:0.5rem;margin-top:1rem;">';
+                Object.keys(labelMap).forEach(function(k) {
+                    var v = diagData.riasecScores[k] || 0;
+                    html += '<div style="text-align:center;padding:0.5rem;background:#f8fafc;border-radius:8px;">';
+                    html += '<div style="font-weight:600;color:#1e293b;">' + labelMap[k] + '</div>';
+                    html += '<div style="font-size:1.5rem;font-weight:700;color:#3b82f6;">' + v + '</div>';
+                    html += '</div>';
+                });
+                html += '</div></div>';
+            }
+
+            // 3. 경쟁력 점수 (계산기 데이터)
+            if (calcData) {
+                html += '<div class="report-card">';
+                html += '<h3><i class="fas fa-trophy" style="color:#f59e0b;"></i> 취업 경쟁력 점수</h3>';
+                html += '<div style="text-align:center;margin-bottom:1.5rem;">';
+                if (calcData.gradeInfo) {
+                    html += '<div style="font-size:2.5rem;font-weight:700;">' + (calcData.gradeInfo.grade || '') + '</div>';
+                    html += '<div style="font-size:1.2rem;color:#64748b;">' + (calcData.gradeInfo.description || '') + '</div>';
+                }
+                html += '<div style="font-size:2rem;font-weight:700;color:#1e293b;margin-top:0.5rem;">' + (calcData.totalScore || 0) + '점 / 100점</div>';
+                html += '</div>';
+
+                if (calcData.scoreBreakdown) {
+                    var colors = {'기본정보':'#3b82f6','직무별역량':'#8b5cf6','시장수용도':'#22c55e'};
+                    Object.keys(calcData.scoreBreakdown).forEach(function(key) {
+                        var bd = calcData.scoreBreakdown[key];
+                        var pct = Math.round((bd.score / bd.max) * 100);
+                        html += '<div style="margin-bottom:1rem;">';
+                        html += '<div style="display:flex;justify-content:space-between;margin-bottom:0.3rem;"><strong>' + key + '</strong><span>' + bd.score + '/' + bd.max + '점</span></div>';
+                        html += '<div class="report-bar"><div class="report-bar-fill" style="width:' + pct + '%;background:' + (colors[key]||'#3b82f6') + ';"></div></div>';
+                        html += '</div>';
+                    });
+                }
+                html += '</div>';
+            }
+
+            // 4. 액션 플랜 (계산기 recommendations)
+            if (calcData && calcData.skillRecommendations && calcData.skillRecommendations.length > 0) {
+                html += '<div class="report-card">';
+                html += '<h3><i class="fas fa-rocket" style="color:#22c55e;"></i> 액션 플랜</h3>';
+                calcData.skillRecommendations.forEach(function(rec) {
+                    html += '<div class="action-plan-card">';
+                    html += '<h4>' + rec.title + '</h4>';
+                    html += '<p>' + rec.content + '</p>';
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+
+            // PDF 다운로드 버튼
+            html += '<div style="text-align:center;margin:2rem 0;">';
+            html += '<button onclick="downloadReportPDF()" style="background:linear-gradient(135deg,#3b82f6,#2563eb);color:white;border:none;padding:0.75rem 2rem;border-radius:30px;font-size:1rem;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(59,130,246,0.3);"><i class="fas fa-file-pdf" style="margin-right:0.5rem;"></i>PDF 다운로드</button>';
+            html += '</div>';
+
+            // 푸터
+            html += '<footer class="footer" style="margin-top:2rem;"><p class="company-name">&copy; 2025 OpenConnect Co., Ltd.</p></footer>';
+
+            container.innerHTML = html;
+            showSection('report-section');
+
+            // RIASEC 레이더 차트 렌더링
+            if (diagData && diagData.riasecScores) {
+                setTimeout(function() { renderReportRadarChart(diagData.riasecScores); }, 100);
+            }
+        }
+
+        function renderReportRadarChart(scores) {
+            var canvas = document.getElementById('report-radar-chart');
+            if (!canvas || !window.Chart) return;
+
+            var labels = ['현실형(R)','탐구형(I)','예술형(A)','사회형(S)','진취형(E)','관습형(C)'];
+            var data = [scores.R||0, scores.I||0, scores.A||0, scores.S||0, scores.E||0, scores.C||0];
+
+            new Chart(canvas, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'RIASEC 점수',
+                        data: data,
+                        backgroundColor: 'rgba(59,130,246,0.2)',
+                        borderColor: '#3b82f6',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#3b82f6',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 5,
+                            ticks: { stepSize: 1 }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        }
+
+        function backFromReport() {
+            showServiceCards();
+        }
+
+        function downloadReportPDF() {
+            var content = document.getElementById('report-content');
+            if (!content || !window.html2canvas || !window.jspdf) {
+                alert('PDF 라이브러리가 로드되지 않았습니다. 잠시 후 다시 시도해주세요.');
+                return;
+            }
+
+            html2canvas(content, { scale: 2, useCORS: true, logging: false }).then(function(canvas) {
+                var imgData = canvas.toDataURL('image/png');
+                var pdf = new window.jspdf.jsPDF('p', 'mm', 'a4');
+                var pageWidth = pdf.internal.pageSize.getWidth();
+                var pageHeight = pdf.internal.pageSize.getHeight();
+                var imgWidth = pageWidth - 20;
+                var imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                var yOffset = 10;
+                var remainingHeight = imgHeight;
+
+                while (remainingHeight > 0) {
+                    pdf.addImage(imgData, 'PNG', 10, yOffset, imgWidth, imgHeight);
+                    remainingHeight -= (pageHeight - 20);
+                    if (remainingHeight > 0) {
+                        pdf.addPage();
+                        yOffset = -(imgHeight - remainingHeight) + 10;
+                    }
+                }
+
+                pdf.save('InsideJob_통합리포트_' + new Date().toISOString().slice(0,10) + '.pdf');
+            });
+        }
+
         // HTML onclick에서 호출 가능하도록 전역 등록
         window.showConsentModal = showConsentModal;
         window.hideConsentModal = hideConsentModal;
@@ -978,6 +1494,10 @@
         window.loadService = loadService;
         window.backToServices = backToServices;
         window.resetConsent = resetConsent;
+        window.skipToStep = skipToStep;
+        window.showIntegratedReport = showIntegratedReport;
+        window.backFromReport = backFromReport;
+        window.downloadReportPDF = downloadReportPDF;
     })();
     </script>
 </body>
