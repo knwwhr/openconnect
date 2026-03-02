@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InsideJob - 취업 경쟁력 점수</title>
-    <meta name="description" content="나의 취업 경쟁력은 몇 점? 직무 진단부터 경쟁력 점수, 점수 올리기까지.">
+    <title>InsideJob - 통합 커리어 진단 플랫폼</title>
+    <meta name="description" content="커리어 진단 → 경쟁력 계산 → 자기소개서 작성을 하나의 플랫폼에서 해결하세요.">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -784,30 +784,31 @@
         <img src="logo.png" alt="InsideJob Logo" class="hero-logo" />
 
         <!-- 서비스 소개 -->
-        <h1 class="hero-title">취업 경쟁력은 몇 점?</h1>
+        <h1 class="hero-title">인사이드잡</h1>
         <p class="hero-tagline" style="margin-bottom: 0.8rem;">
-            나의 취업 경쟁력을 측정하고, 점수를 올리세요
+            취업 준비의 모든 것, All in One!<br>
+            커리어진단, 경쟁력 분석, 자기소개서 작성
         </p>
 
-        <!-- 3단계 스텝 -->
+        <!-- 3가지 핵심 가치 -->
         <div class="value-points">
             <div class="value-point">
-                <i class="fas fa-search"></i>
-                <span>Step 1: 직무 찾기</span>
+                <i class="fas fa-chart-line"></i>
+                <span>316개 직무 맞춤 진단</span>
             </div>
             <div class="value-point">
                 <i class="fas fa-trophy"></i>
-                <span>Step 2: 점수 확인</span>
+                <span>데이터 기반 경쟁력 분석</span>
             </div>
             <div class="value-point">
                 <i class="fas fa-rocket"></i>
-                <span>Step 3: 점수 올리기</span>
+                <span>실행 가능한 가이드</span>
             </div>
         </div>
 
         <!-- CTA 버튼 -->
         <button id="start-service-btn" class="cta-button" onclick="showConsentModal()">
-            내 점수 확인하기
+            ✨ 무료로 시작하기
         </button>
 
         <p class="privacy-notice" style="margin-top: 0.8rem;">
@@ -910,60 +911,68 @@
         </div>
     </div>
 
-    <!-- 3. 서비스 카드 섹션 (스텝 플로우) -->
+    <!-- 3. 서비스 카드 섹션 -->
     <section id="service-cards-section" class="page-section service-cards-section">
         <div class="service-cards-header">
-            <h2>취업 경쟁력 높이기 3단계</h2>
-            <p>순서대로 진행하거나, 원하는 단계부터 시작하세요</p>
+            <h2>원하는 서비스를 선택하세요</h2>
+            <p>3가지 서비스를 모두 이용하실 수 있습니다</p>
         </div>
 
-        <div class="step-flow-container">
-            <!-- Step 1: 직무 찾기 -->
-            <div class="step-flow-item" id="step-flow-1">
-                <div class="step-flow-left">
-                    <div class="step-flow-number" id="step-num-1">1</div>
-                    <div class="step-flow-line" id="step-line-1"></div>
+        <div class="service-cards-grid">
+            <!-- 카드 1: 커리어 진단 -->
+            <div class="service-card" onclick="loadService('diagnosis')">
+                <div class="service-card-icon">
+                    <i class="fas fa-chart-line"></i>
                 </div>
-                <div class="step-flow-card" id="step-card-1" onclick="loadService('diagnosis')">
-                    <h3><i class="fas fa-search" style="color:#3b82f6;margin-right:0.5rem;"></i>나에게 맞는 직무 찾기</h3>
-                    <p>RIASEC 성향 분석으로 316개 직무 중 나에게 맞는 직무를 추천받으세요</p>
-                    <span class="step-flow-status available" id="step-status-1">시작하기</span>
-                    <button class="skip-link" onclick="event.stopPropagation(); skipToStep(2);">건너뛰기</button>
-                </div>
+                <h3>커리어 진단</h3>
+                <p>강점 발견 → 직무 매칭 → 준비 가이드</p>
+                <ul class="service-card-features">
+                    <li>✓ 6가지 RIASEC 성향 분석</li>
+                    <li>✓ 316개 직무 맞춤 추천</li>
+                    <li>✓ 실행 가능한 커리어 로드맵</li>
+                </ul>
+                <p style="font-size:0.82rem;color:#3b82f6;margin-bottom:1rem;">나에게 맞는 직무를 찾고, 경쟁력 계산에 자동 반영됩니다</p>
+                <button class="service-card-button">진단 시작하기</button>
             </div>
 
-            <!-- Step 2: 점수 확인 -->
-            <div class="step-flow-item" id="step-flow-2">
-                <div class="step-flow-left">
-                    <div class="step-flow-number" id="step-num-2">2</div>
-                    <div class="step-flow-line" id="step-line-2"></div>
+            <!-- 카드 2: 경쟁력 계산 -->
+            <div class="service-card" onclick="loadService('calculator')">
+                <div class="service-card-icon">
+                    <i class="fas fa-calculator"></i>
                 </div>
-                <div class="step-flow-card" id="step-card-2" onclick="loadService('calculator')">
-                    <h3><i class="fas fa-calculator" style="color:#3b82f6;margin-right:0.5rem;"></i>취업 경쟁력 점수 확인</h3>
-                    <p>316개 직무별 취업 경쟁력을 100점으로 정량화. 3단계 평가로 정확한 점수를 확인하세요</p>
-                    <span class="step-flow-status available" id="step-status-2">시작하기</span>
-                    <button class="skip-link" onclick="event.stopPropagation(); skipToStep(3);">건너뛰기</button>
-                </div>
+                <h3>경쟁력 계산</h3>
+                <p>나의 취업 경쟁력 점수 확인</p>
+                <ul class="service-card-features">
+                    <li>✓ 3단계 100점 만점 평가</li>
+                    <li>✓ 직무별 맞춤 경쟁력 분석</li>
+                    <li>✓ 부족한 역량 개선 가이드</li>
+                </ul>
+                <p style="font-size:0.82rem;color:#3b82f6;margin-bottom:1rem;">316개 직무별 경쟁력을 100점으로 정량화 — 해외에도 없는 기능</p>
+                <button class="service-card-button">계산 시작하기</button>
             </div>
 
-            <!-- Step 3: 점수 올리기 -->
-            <div class="step-flow-item" id="step-flow-3">
-                <div class="step-flow-left">
-                    <div class="step-flow-number" id="step-num-3">3</div>
+            <!-- 카드 3: 자기소개서 -->
+            <div class="service-card" onclick="loadService('toolkit')">
+                <div class="service-card-icon">
+                    <i class="fas fa-pen-fancy"></i>
                 </div>
-                <div class="step-flow-card" id="step-card-3" onclick="loadService('toolkit')">
-                    <h3><i class="fas fa-pen-fancy" style="color:#3b82f6;margin-right:0.5rem;"></i>점수 올리기: 자소서 작성</h3>
-                    <p>체계적인 자기소개서 작성으로 취업 경쟁력을 높이세요</p>
-                    <span class="step-flow-status available" id="step-status-3">시작하기</span>
-                </div>
+                <h3>자기소개서 툴킷</h3>
+                <p>체계적인 자소서 작성 도구</p>
+                <ul class="service-card-features">
+                    <li>✓ 경험 체계화 가이드</li>
+                    <li>✓ 강점별 사례 정리</li>
+                    <li>✓ 파일로 저장 및 내보내기</li>
+                </ul>
+                <p style="font-size:0.82rem;color:#3b82f6;margin-bottom:1rem;">진단과 경쟁력 분석 결과를 바탕으로 자소서를 작성하세요</p>
+                <button class="service-card-button">작성 시작하기</button>
             </div>
+        </div>
 
-            <!-- 통합 리포트 버튼 -->
-            <div class="report-btn-container">
-                <button id="show-report-btn" class="report-btn" onclick="showIntegratedReport()">
-                    <i class="fas fa-file-alt" style="margin-right:0.5rem;"></i>통합 리포트 보기
-                </button>
-            </div>
+        <!-- 통합 리포트 버튼 -->
+        <div class="report-btn-container" style="text-align:center;margin-top:2rem;">
+            <button id="show-report-btn" class="report-btn" onclick="showIntegratedReport()">
+                <i class="fas fa-file-alt" style="margin-right:0.5rem;"></i>통합 리포트 보기
+            </button>
         </div>
 
         <!-- 푸터 (서비스 카드 섹션 내부) -->
