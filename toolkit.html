@@ -9,7 +9,7 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            font-size: 18px;
+            font-size: 16px;
             line-height: 1.6;
             background-color: #f8fafc;
             margin: 0;
@@ -82,6 +82,7 @@
 
         .form-row {
             display: flex;
+            flex-wrap: wrap;
             gap: 1rem;
             margin-bottom: 1rem;
         }
@@ -121,7 +122,7 @@
 
         textarea {
             resize: vertical;
-            min-height: 80px;
+            min-height: 120px;
         }
 
         /* 버튼 스타일 - 취업경쟁력 계산기와 동일 */
@@ -199,14 +200,42 @@
 
         .remove-experience {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
+            top: 8px;
+            right: 8px;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
             color: #ef4444;
-            font-size: 1.2rem;
+            font-size: 1rem;
             cursor: pointer;
-            padding: 5px;
+            padding: 8px;
+            border-radius: 8px;
+            min-width: 36px;
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .remove-experience:hover {
+            background: #fee2e2;
+            border-color: #f87171;
+        }
+
+        .remove-cert {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #ef4444;
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 6px 10px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .remove-cert:hover {
+            background: #fee2e2;
         }
 
         .strengths-grid {
@@ -322,13 +351,60 @@
             }
         }
 
+        .char-counter {
+            text-align: right;
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-top: 4px;
+        }
+
+        .char-counter.near-limit { color: #f59e0b; }
+        .char-counter.at-limit { color: #ef4444; font-weight: 600; }
+
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 9999;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .autosave-indicator {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            background: rgba(34, 197, 94, 0.9);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .autosave-indicator.show { opacity: 1; }
+
         .progress-bar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            background: #f3f4f6;
-            height: 4px;
+            background: #e2e8f0;
+            height: 6px;
             z-index: 1000;
         }
 
@@ -416,7 +492,8 @@
             </div>
             <div class="form-group">
                 <label for="motivation">지원 동기 한 문장 (≤200자)</label>
-                <textarea id="motivation" placeholder="왜 이 산업/직무/회사인지" maxlength="200"></textarea>
+                <textarea id="motivation" placeholder="왜 이 산업/직무/회사인지" maxlength="200" oninput="updateCharCount(this, 200)"></textarea>
+                <div class="char-counter" id="motivation-counter">0 / 200자</div>
             </div>
             <div class="form-group">
                 <label for="workType">희망 근무 형태/조건</label>
@@ -671,6 +748,7 @@
             const container = document.getElementById('certificateContainer');
             const certDiv = document.createElement('div');
             certDiv.className = 'form-row';
+            certDiv.style.position = 'relative';
             certDiv.innerHTML = `
                 <div class="form-group">
                     <label>구분</label>
@@ -693,6 +771,11 @@
                 <div class="form-group">
                     <label>주요 내용·점수</label>
                     <input type="text" placeholder="점수, 등급 등">
+                </div>
+                <div class="form-group" style="flex:0 0 auto;display:flex;align-items:flex-end;">
+                    <button type="button" class="remove-cert" onclick="this.closest('.form-row').remove(); updateProgress();">
+                        <i class="fas fa-times"></i> 삭제
+                    </button>
                 </div>
             `;
             container.appendChild(certDiv);
@@ -770,7 +853,7 @@
         function exportToHTML() {
             const data = collectAllData();
             const html = generateHTMLReport(data);
-            
+
             const blob = new Blob([html], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -778,6 +861,7 @@
             a.download = 'self-intro-report.html';
             a.click();
             URL.revokeObjectURL(url);
+            showToast('파일 다운로드가 시작되었습니다', 2000);
         }
 
         // HTML 보고서 생성
@@ -799,13 +883,13 @@
         }
         .container { max-width: 800px; margin: 0 auto; }
         .header {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
             padding: 2rem;
             border-radius: 15px;
             text-align: center;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
         }
         .header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
         .header p { opacity: 0.9; font-size: 1.1rem; }
@@ -817,7 +901,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         .section-title {
-            color: #6366f1;
+            color: #3b82f6;
             font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 1.5rem;
@@ -837,7 +921,7 @@
             padding: 1rem;
             background: #f8fafc;
             border-radius: 10px;
-            border-left: 4px solid #6366f1;
+            border-left: 4px solid #3b82f6;
         }
         .info-label {
             font-weight: 600;
@@ -854,7 +938,7 @@
             margin-bottom: 1.5rem;
         }
         .experience-title {
-            color: #6366f1;
+            color: #3b82f6;
             font-weight: 700;
             font-size: 1.2rem;
             margin-bottom: 1rem;
@@ -873,7 +957,7 @@
             gap: 0.5rem;
         }
         .strength-tag {
-            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+            background: linear-gradient(45deg, #3b82f6, #2563eb);
             color: white;
             padding: 0.5rem 1rem;
             border-radius: 20px;
@@ -887,14 +971,14 @@
             margin-bottom: 0.5rem;
         }
         .link-item a {
-            color: #6366f1;
+            color: #3b82f6;
             text-decoration: none;
         }
         .link-item a:hover {
             text-decoration: underline;
         }
         .footer {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
             text-align: center;
             color: white;
             font-size: 0.9rem;
@@ -1097,14 +1181,118 @@
             };
         }
 
+        // 토스트 알림
+        function showToast(message, duration) {
+            duration = duration || 2500;
+            var existing = document.querySelector('.toast-notification');
+            if (existing) existing.remove();
+            var toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            requestAnimationFrame(function() { toast.classList.add('show'); });
+            setTimeout(function() {
+                toast.classList.remove('show');
+                setTimeout(function() { toast.remove(); }, 400);
+            }, duration);
+        }
+
+        // 글자 수 카운터
+        function updateCharCount(el, max) {
+            var counter = el.parentElement.querySelector('.char-counter');
+            if (!counter) return;
+            var len = el.value.length;
+            counter.textContent = len + ' / ' + max + '자';
+            counter.className = 'char-counter';
+            if (len >= max) counter.classList.add('at-limit');
+            else if (len >= max * 0.8) counter.classList.add('near-limit');
+        }
+
+        // Autosave to localStorage
+        var autosaveTimer = null;
+        var hasUnsavedChanges = false;
+
+        function autoSave() {
+            try {
+                var data = collectAllData();
+                localStorage.setItem('insidejob_toolkit_autosave', JSON.stringify(data));
+                hasUnsavedChanges = false;
+                // 저장 표시
+                var indicator = document.getElementById('autosave-indicator');
+                if (indicator) {
+                    indicator.classList.add('show');
+                    setTimeout(function() { indicator.classList.remove('show'); }, 1500);
+                }
+            } catch(e) {}
+        }
+
+        function scheduleAutosave() {
+            hasUnsavedChanges = true;
+            if (autosaveTimer) clearTimeout(autosaveTimer);
+            autosaveTimer = setTimeout(autoSave, 3000);
+        }
+
+        function loadAutosave() {
+            try {
+                var saved = localStorage.getItem('insidejob_toolkit_autosave');
+                if (!saved) return;
+                var data = JSON.parse(saved);
+                if (!data || !data.basicInfo) return;
+
+                // 기본정보 복원
+                if (data.basicInfo.name) document.getElementById('name').value = data.basicInfo.name;
+                if (data.basicInfo.phone) document.getElementById('phone').value = data.basicInfo.phone;
+                if (data.basicInfo.email) document.getElementById('email').value = data.basicInfo.email;
+                if (data.basicInfo.school) document.getElementById('school').value = data.basicInfo.school;
+                if (data.basicInfo.location) document.getElementById('location').value = data.basicInfo.location;
+                if (data.basicInfo.hopedDate) document.getElementById('hopedDate').value = data.basicInfo.hopedDate;
+
+                // 지원 목표 복원
+                if (data.target) {
+                    if (data.target.industry) document.getElementById('industry').value = data.target.industry;
+                    if (data.target.position) document.getElementById('position').value = data.target.position;
+                    if (data.target.motivation) {
+                        document.getElementById('motivation').value = data.target.motivation;
+                        updateCharCount(document.getElementById('motivation'), 200);
+                    }
+                    if (data.target.workType) document.getElementById('workType').value = data.target.workType;
+                }
+
+                // 포트폴리오 복원
+                if (data.portfolio) {
+                    if (data.portfolio.linkedin) document.getElementById('linkedin').value = data.portfolio.linkedin;
+                    if (data.portfolio.portfolio) document.getElementById('portfolio').value = data.portfolio.portfolio;
+                    if (data.portfolio.blog) document.getElementById('blog').value = data.portfolio.blog;
+                    if (data.portfolio.presentation) document.getElementById('presentation').value = data.portfolio.presentation;
+                    if (data.portfolio.others) document.getElementById('others').value = data.portfolio.others;
+                }
+
+                showToast('이전 작성 내용을 불러왔습니다', 2000);
+            } catch(e) {}
+        }
+
+        // 페이지 이탈 경고
+        window.addEventListener('beforeunload', function(e) {
+            if (hasUnsavedChanges) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
         // 페이지 로드 시 이벤트 리스너 추가
         document.addEventListener('DOMContentLoaded', function() {
-            // 입력 필드 변경 시 진행률 업데이트
-            document.addEventListener('input', updateProgress);
-            document.addEventListener('change', updateProgress);
+            // 입력 필드 변경 시 진행률 업데이트 + autosave 스케줄
+            document.addEventListener('input', function() { updateProgress(); scheduleAutosave(); });
+            document.addEventListener('change', function() { updateProgress(); scheduleAutosave(); });
 
             // 초기 경험 하나 추가
             addExperience();
+
+            // 자동저장 데이터 복원
+            loadAutosave();
+
+            // 진행률 초기화
+            updateProgress();
         });
 
         // 히스토리 네비게이션 - 뒤로가기 시 부모 페이지로
@@ -1121,6 +1309,8 @@
             });
         })();
     </script>
+
+    <div class="autosave-indicator" id="autosave-indicator">저장됨</div>
 
     <!-- 푸터 추가 -->
     <div class="footer">
