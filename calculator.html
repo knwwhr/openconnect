@@ -317,8 +317,7 @@
                 return () => window.removeEventListener('popstate', handlePopState);
             }, []);
 
-            // 진단 결과 자동 반영용 알림
-            const [diagnosisNotice, setDiagnosisNotice] = useState(null);
+            // 진단 결과 자동 반영 (토스트로 알림)
 
             // 진단 결과에서 추천 직무 자동 반영 (setTimeout으로 authorizedJobDatabase 정의 후 실행)
             const diagnosisAutoApplied = useRef(false);
@@ -344,10 +343,10 @@
                         diagnosisAutoApplied.current = true;
                         if (allJobs.includes(jobId)) {
                             setFormData(prev => ({ ...prev, targetJob: jobId }));
-                            setDiagnosisNotice('진단 결과에서 추천된 \'' + jobTitle + '\'이(가) 자동 선택되었습니다');
+                            showToast('진단 결과에서 추천된 \'' + jobTitle + '\'이(가) 자동 선택되었습니다', 3500);
                         } else {
                             setFormData(prev => ({ ...prev, targetJob: 'custom', customJob: jobTitle }));
-                            setDiagnosisNotice('진단 결과에서 추천된 \'' + jobTitle + '\'이(가) 자동 입력되었습니다');
+                            showToast('진단 결과에서 추천된 \'' + jobTitle + '\'이(가) 자동 입력되었습니다', 3500);
                         }
                     } catch(e) {
                         console.warn('진단 결과 자동 반영 실패:', e);
@@ -2205,14 +2204,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        {diagnosisNotice && (
-                            <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm flex items-center gap-2">
-                                <i className="fas fa-check-circle"></i>
-                                <span>{diagnosisNotice}</span>
-                                <button onClick={() => setDiagnosisNotice(null)} className="ml-auto text-green-600 hover:text-green-800">&times;</button>
-                            </div>
-                        )}
 
                         <div className="card">
                             <h3 className="text-xl font-bold text-gray-900 mb-6">기본정보 및 배경</h3>
@@ -4084,26 +4075,22 @@
                             </div>
                         </div>
 
-                        {/* 주요 액션 버튼 */}
-                        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                        {/* 액션 버튼 */}
+                        <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
                             <button
-                                className="btn-primary px-6 py-3"
+                                className="btn-primary px-4 py-3 text-sm"
                                 onClick={downloadResultAsHTML}
                             >
-                                📥 결과 저장하기
+                                📥 결과 저장
                             </button>
                             <button
-                                className="btn-primary px-6 py-3"
+                                className="btn-primary px-4 py-3 text-sm"
                                 onClick={shareCompetitivenessCard}
                             >
-                                📸 경쟁력 카드 공유
+                                📸 카드 공유
                             </button>
-                        </div>
-
-                        {/* 보조 액션 버튼 */}
-                        <div className="flex flex-col sm:flex-row gap-2 justify-center mt-3">
                             <button
-                                className="px-5 py-2.5 rounded-lg text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+                                className="px-4 py-2.5 rounded-lg text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
                                 onClick={() => {
                                     setCalculatorStep(3);
                                     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4112,7 +4099,7 @@
                                 ← 수정하기
                             </button>
                             <button
-                                className="px-5 py-2.5 rounded-lg text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
+                                className="px-4 py-2.5 rounded-lg text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
                                 onClick={() => {
                                     setCalculatorStep(1);
                                     setFormData({
