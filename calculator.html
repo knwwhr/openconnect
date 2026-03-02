@@ -519,19 +519,9 @@
                 switch(step) {
                     case 1:
                         // targetJob이 있거나 customJob이 있으면 OK
-                        const hasValidJob = formData.targetJob && 
+                        const hasValidJob = formData.targetJob &&
                                           (formData.targetJob !== 'custom' || (formData.targetJob === 'custom' && formData.customJob && formData.customJob.trim()));
-                        
-                            gender: formData.gender,
-                            age: formData.age,
-                            educationLevel: formData.educationLevel,
-                            majorField: formData.majorField,
-                            targetJob: formData.targetJob,
-                            customJob: formData.customJob,
-                            languageLevel: formData.languageLevel,
-                            hasValidJob: hasValidJob
-                        });
-                        
+
                         return formData.gender && formData.age && formData.educationLevel && formData.majorField && hasValidJob && formData.languageLevel;
                     case 2:
                         // Pool에 없는 직무 체크
@@ -1099,12 +1089,7 @@
                 } else if (matchingInfo.good.includes(selectedJob)) {
                     jobMatchScore = 10; // 양호한 매칭
                 }
-                
-                    major: currentMajor,
-                    job: selectedJob,
-                    score: jobMatchScore
-                });
-                
+
                 basicScore += jobMatchScore;
 
                 // 어학능력 (5점) - 가중치 없음, 단순 평가
