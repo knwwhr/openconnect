@@ -27,9 +27,9 @@
     <!-- 인사이드잡 스타일 -->
     <style>
         /* 인사이드잡 기본 스타일 */
-        body { 
+        body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            font-size: 18px;
+            font-size: 16px;
             line-height: 1.6;
             background-color: #f8fafc;
             margin: 0;
@@ -182,6 +182,54 @@
         .responsive-text-sm {
             font-size: clamp(0.65rem, 2.5vw, 0.875rem);
         }
+
+        /* 토스트 알림 */
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 9999;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 90vw;
+            text-align: center;
+        }
+
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* 스텝 전환 애니메이션 */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-animate {
+            animation: fadeInUp 0.35s ease-out;
+        }
+
+        /* 프로그레스 바 높이 개선 */
+        .progress-bar-calc {
+            height: 10px !important;
+        }
+
+        /* iOS input zoom 방지 */
+        @media screen and (max-width: 768px) {
+            input[type="text"],
+            input[type="number"],
+            select,
+            textarea {
+                font-size: 16px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -189,6 +237,21 @@
     
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
+
+        // 커스텀 토스트 함수 (alert 대체)
+        function showToast(message, duration = 2500) {
+            const existing = document.querySelector('.toast-notification');
+            if (existing) existing.remove();
+            const toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            requestAnimationFrame(() => { toast.classList.add('show'); });
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, duration);
+        }
 
         // 취업경쟁력 계산기 - 3단계 객관식 평가 시스템
         const CareerCompetitivenessCalculator = ({ savedCalculations = [], onCalculationComplete, setCurrentView, currentUser, showNotification, setAuthMode, setShowSaveResultSignupModal }) => {
@@ -394,9 +457,6 @@
             const updatePopularJobs = async () => {
                 try {
                     // 워크넷 오픈API 또는 외부 JSON 파일에서 최신 데이터 가져오기
-                    console.log('인기 직무 데이터 업데이트 시작...');
-                    console.log('현재 데이터 출처:', popularJobsConfig.source);
-                    console.log('마지막 업데이트:', popularJobsConfig.lastUpdated);
                     
                     // 실제 구현 시 API 호출 로직 추가
                     // const response = await fetch(popularJobsConfig.updateUrl);
@@ -404,7 +464,6 @@
                     // popularJobsConfig.jobs = newData.jobs;
                     // popularJobsConfig.lastUpdated = new Date().toISOString().split('T')[0];
                     
-                    console.log('업데이트 완료 (현재는 시뮬레이션)');
                 } catch (error) {
                     console.error('인기 직무 데이터 업데이트 실패:', error);
                 }
@@ -412,10 +471,8 @@
 
             // 일반 필드 처리 함수
             const handleInputChange = (field, value) => {
-                console.log(`필드 변경: ${field} = ${value}`); // 디버깅용
                 setFormData(prevData => {
                     const newData = { ...prevData, [field]: value };
-                    console.log('업데이트된 formData:', newData);
                     return newData;
                 });
             };
@@ -434,7 +491,6 @@
                         const hasValidJob = formData.targetJob && 
                                           (formData.targetJob !== 'custom' || (formData.targetJob === 'custom' && formData.customJob && formData.customJob.trim()));
                         
-                        console.log('1단계 유효성 검사:', {
                             gender: formData.gender,
                             age: formData.age,
                             educationLevel: formData.educationLevel,
@@ -1013,7 +1069,6 @@
                     jobMatchScore = 10; // 양호한 매칭
                 }
                 
-                console.log('전공-직무 매칭:', {
                     major: currentMajor,
                     job: selectedJob,
                     score: jobMatchScore
@@ -1073,7 +1128,6 @@
                 } else {
                     // 직무별 맞춤 평가
                     const jobGroup = getJobGroup(selectedJob);
-                    console.log('선택된 직무:', selectedJob, '-> 직무그룹:', jobGroup);
                     
                     if (jobGroup === 'tech_development') {
                         // 기술/개발 직무 (기존 이공계 로직 활용)
@@ -1108,7 +1162,6 @@
                         skillScore += Math.min(techCertScore, 13);
                     } else if (jobGroup === 'marketing_sales') {
                         // 마케팅/영업 직무 평가
-                        console.log('마케팅/영업 직무 평가 시작');
                         // 마케팅 도구 (9점) - 한국 디지털 마케팅 중심
                         const marketingToolScores = {
                             'naver_searchad': 3, 'naver_shopping': 3, 'kakao_bizboard': 3, 'google_analytics': 3, 'facebook_meta_ads': 3
@@ -1138,10 +1191,8 @@
                             marketingCertScore += marketingCertScores[cert] || 0;
                         });
                         skillScore += Math.min(marketingCertScore, 13);
-                        console.log('마케팅/영업 직무 평가 완료 - 도구점수:', Math.min(marketingToolScore, 9), '경험점수:', Math.min(marketingExpScore, 13), '자격증점수:', Math.min(marketingCertScore, 13));
                     } else if (jobGroup === 'business_support') {
                         // 경영지원/관리 직무 평가
-                        console.log('경영지원/관리 직무 평가 시작');
                         
                         // 경영지원 도구 (9점) - 기본 사무 도구 중심
                         const businessToolScores = {
@@ -1177,7 +1228,6 @@
                             businessCertScore = 0;   // 0%
                         }
                         skillScore += businessCertScore;
-                        console.log('경영지원/관리 직무 평가 완료 - 도구점수:', Math.min(businessToolScore, 9), '경험점수:', Math.min(businessExpScore, 13), '자격증점수:', Math.min(businessCertScore, 13));
                     } else if (jobGroup === 'design') {
                         // 디자인 직무 평가
                         // 디자인 툴 (9점) - 한국 디자인 업계 중심
@@ -1211,7 +1261,6 @@
                         skillScore += Math.min(designCertScore, 13);
                     } else if (jobGroup === 'specialized_professional') {
                         // 전문직/산업별 직무 평가
-                        console.log('전문직/산업별 직무 평가 시작');
                         
                         // 전문 도구/시스템 (9점)
                         const specializedToolScores = {
@@ -1245,10 +1294,8 @@
                             specializedCertScore += specializedCertScores[cert] || 0;
                         });
                         skillScore += Math.min(specializedCertScore, 13);
-                        console.log('전문직/산업별 직무 평가 완료 - 도구점수:', Math.min(specializedToolScore, 9), '경험점수:', Math.min(specializedExpScore, 13), '자격증점수:', Math.min(specializedCertScore, 13));
                     } else if (jobGroup === 'planning_strategy') {
                         // 기획/전략/분석 직무 평가
-                        console.log('기획/전략/분석 직무 평가 시작');
                         
                         // 오피스 스킬 (9점) - 한국 기업 업무 중심
                         const officeSkillScores = {
@@ -1279,7 +1326,6 @@
                             planningCertScore += planningCertScores[cert] || 0;
                         });
                         skillScore += Math.min(planningCertScore, 13);
-                        console.log('기획/전략/분석 직무 평가 완료 - 오피스점수:', Math.min(officeScore, 9), '경험점수:', Math.min(planningExpScore, 13), '자격증점수:', Math.min(planningCertScore, 13));
                     } else {
                         // 기타 직무는 기존 문과/경영 로직 활용 (기획/전략/분석 중심)
                         // 오피스 스킬 (9점)
@@ -1415,7 +1461,6 @@
 
                 // Pool에 없는 직무용 범용 평가 (40점)
                 if (isOutOfPoolJob(selectedJob)) {
-                    console.log('Pool에 없는 직무로 범용 질문 적용:', selectedJob);
                     
                     // 업무 도구/소프트웨어 (10점)
                     const generalToolScores = {
@@ -2287,7 +2332,6 @@
                                                 key={option.value}
                                                 type="button"
                                                 onClick={() => {
-                                                    console.log('빠른 선택:', option.value);
                                                     if (option.value === 'others') {
                                                         handleInputChange('targetJob', 'custom');
                                                         handleInputChange('customJob', '');
@@ -2331,7 +2375,6 @@
                                     <select
                                         value={formData.customJob || ''}
                                         onChange={(e) => {
-                                            console.log('직무 선택:', e.target.value);
                                             handleInputChange('customJob', e.target.value);
                                             if (e.target.value.trim()) {
                                                 handleInputChange('targetJob', 'custom');
@@ -2501,7 +2544,6 @@
                     }
                     
                     const jobGroup = getJobGroup(selectedJob);
-                    console.log('선택된 직무:', selectedJob, '→ 직무 그룹:', jobGroup);
                     
                     switch(jobGroup) {
                         case 'tech_development':
@@ -2708,7 +2750,7 @@
                                              const currentCount = formData.programmingSkills?.length || 0;
                                              
                                              if (!isChecked && currentCount >= 3) {
-                                                 alert('최대 3개까지 선택 가능합니다.');
+                                                 showToast('최대 3개까지 선택 가능합니다.');
                                                  return;
                                              }
                                              
@@ -2723,7 +2765,7 @@
                                                 
                                                 if (e.target.checked && currentCount >= 3) {
                                                     e.preventDefault();
-                                                    alert('최대 3개까지 선택 가능합니다.');
+                                                    showToast('최대 3개까지 선택 가능합니다.');
                                                     return;
                                                 }
                                                 
@@ -2892,7 +2934,7 @@
                                              const currentCount = formData.officeSkills?.length || 0;
                                              
                                              if (!isChecked && currentCount >= 3) {
-                                                 alert('최대 3개까지 선택 가능합니다.');
+                                                 showToast('최대 3개까지 선택 가능합니다.');
                                                  return;
                                              }
                                              
@@ -2907,7 +2949,7 @@
                                                 
                                                 if (e.target.checked && currentCount >= 3) {
                                                     e.preventDefault();
-                                                    alert('최대 3개까지 선택 가능합니다.');
+                                                    showToast('최대 3개까지 선택 가능합니다.');
                                                     return;
                                                 }
                                                 
@@ -4026,31 +4068,35 @@
                             </div>
                         </div>
 
-                        {/* 액션 버튼 */}
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        {/* 주요 액션 버튼 */}
+                        <div className="flex flex-col sm:flex-row gap-3 justify-center">
                             <button
-                                className="btn-primary px-6 py-3 bg-orange-600 hover:bg-orange-700"
+                                className="btn-primary px-6 py-3"
+                                onClick={downloadResultAsHTML}
+                            >
+                                📥 결과 저장하기
+                            </button>
+                            <button
+                                className="btn-primary px-6 py-3"
+                                onClick={shareCompetitivenessCard}
+                            >
+                                📸 경쟁력 카드 공유
+                            </button>
+                        </div>
+
+                        {/* 보조 액션 버튼 */}
+                        <div className="flex flex-col sm:flex-row gap-2 justify-center mt-3">
+                            <button
+                                className="px-5 py-2.5 rounded-lg text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
                                 onClick={() => {
                                     setCalculatorStep(3);
                                     window.scrollTo({ top: 0, behavior: 'smooth' });
                                 }}
                             >
-                                ← 이전 단계로 (수정하기)
+                                ← 수정하기
                             </button>
                             <button
-                                className="btn-primary px-6 py-3 bg-green-600 hover:bg-green-700"
-                                onClick={downloadResultAsHTML}
-                            >
-                                <i className="fas fa-download"></i> 파일(html)로 저장하기
-                            </button>
-                            <button
-                                className="btn-primary px-6 py-3 bg-indigo-600 hover:bg-indigo-700"
-                                onClick={shareCompetitivenessCard}
-                            >
-                                <i className="fas fa-camera"></i> 경쟁력 카드 공유하기
-                            </button>
-                            <button
-                                className="btn-primary px-6 py-3 bg-gray-500 hover:bg-gray-600"
+                                className="px-5 py-2.5 rounded-lg text-sm font-medium border border-gray-300 text-gray-600 hover:bg-gray-50 transition-colors"
                                 onClick={() => {
                                     setCalculatorStep(1);
                                     setFormData({
@@ -4069,13 +4115,7 @@
                                     window.scrollTo({ top: 0, behavior: 'smooth' });
                                 }}
                             >
-                                🔄 다시 진단하기
-                            </button>
-                            <button
-                                className="btn-primary px-6 py-3 bg-green-600 hover:bg-green-700"
-                                onClick={() => window.open('https://insidejob.kr', '_blank')}
-                            >
-                                <i className="fas fa-user-tie"></i> 맞춤형 취업컨설팅 받아보기
+                                🔄 다시 진단
                             </button>
                         </div>
 
@@ -4110,7 +4150,7 @@
                             onCalculationComplete={() => {}} 
                             setCurrentView={() => {}} 
                             currentUser={null} 
-                            showNotification={(message, type) => alert(message)} 
+                            showNotification={(message, type) => showToast(message)} 
                             setAuthMode={() => {}} 
                             setShowSaveResultSignupModal={() => {}} 
                         />
