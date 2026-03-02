@@ -1421,15 +1421,21 @@ input[type="checkbox"] {
         border-radius: 2px;
     }
     
-    /* 단계 헤더 고정 */
+    /* 단계 헤더 고정 - 프로그레스바와 통합 */
     .step-header {
         position: sticky;
-        top: 14px;
+        top: 0;
         background: white;
         z-index: 40;
-        padding: 16px 0;
+        padding: 12px 0;
         margin-bottom: 0;
         border-bottom: 1px solid #f0f0f0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .step-header .progress-bar {
+        position: relative;
+        top: auto;
     }
     
     /* 스크롤 여백 조정 */

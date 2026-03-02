@@ -153,9 +153,12 @@ main {
     background: #d5dbdb;
 }
 
-.btn-secondary:disabled {
+.btn-secondary:disabled,
+.btn-primary:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 /* 버튼 처리 중 상태 (깜빡임 방지) */
@@ -174,8 +177,8 @@ main {
 /* Progress Bar */
 .progress-bar {
     width: 100%;
-    height: 6px;
-    background: #ecf0f1;
+    height: 8px;
+    background: #e2e8f0;
     border-radius: 3px;
     margin-bottom: 2rem;
     overflow: hidden;
@@ -1440,12 +1443,19 @@ main {
 
 /* Simple highlight incomplete question effect */
 .question.highlight-incomplete {
-    background: #fef7f7 !important;
-    border: 1px solid #f39c9c !important;
+    background: #fef2f2 !important;
+    border: 2px solid #ef4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+    animation: pulseIncomplete 1.5s ease-in-out 2;
+}
+
+@keyframes pulseIncomplete {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15); }
+    50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0.25); }
 }
 
 .question.incomplete h3 {
-    color: #e74c3c !important;
+    color: #dc2626 !important;
 }
 
 /* Mobile responsive for validation popup */
@@ -1538,6 +1548,8 @@ main {
     margin: 0 0 15px 0;
     color: #495057;
     line-height: 1.5;
+    word-break: keep-all;
+    overflow-wrap: break-word;
 }
 
 .error-popup-body p:last-child {
@@ -2196,5 +2208,56 @@ main {
     
     .matrix-scale-option .scale-radio-label {
         font-size: 0.75rem;
+    }
+}
+
+/* UI 로더 오버레이 */
+.ui-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(4px);
+}
+
+.loader-content {
+    text-align: center;
+}
+
+.loader-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e2e8f0;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: loaderSpin 0.8s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes loaderSpin {
+    to { transform: rotate(360deg); }
+}
+
+.loader-content p {
+    color: #64748b;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+/* iOS Safari input zoom 방지 */
+@media screen and (max-width: 768px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    select,
+    textarea {
+        font-size: 16px !important;
     }
 }

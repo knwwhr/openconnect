@@ -306,12 +306,12 @@ class UIManager {
         document.body.appendChild(popup);
         this.activePopups.add(popup);
         
-        // 3초 후 자동 닫기 (모바일 UX 고려)
+        // 8초 후 자동 닫기 (충분한 읽기 시간 제공)
         setTimeout(() => {
             if (popup && popup.parentNode) {
                 this.closePopup(popup);
             }
-        }, 3000);
+        }, 8000);
     }
 
     closePopup(popup) {
@@ -334,9 +334,6 @@ class UIManager {
 
     // Loading states
     showLoading(message = '처리 중...') {
-        console.trace('[UIManager] showLoading called:', message);
-        return; // 완전히 비활성화
-        
         const existingLoader = document.querySelector('.ui-loader');
         if (existingLoader) return;
 
@@ -348,7 +345,7 @@ class UIManager {
                 <p>${message}</p>
             </div>
         `;
-        
+
         document.body.appendChild(loader);
     }
 
