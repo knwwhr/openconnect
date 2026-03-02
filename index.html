@@ -518,125 +518,6 @@
             font-size: 1rem;
         }
 
-        /* 스텝 플로우 UI */
-        .step-flow-container {
-            max-width: 700px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        }
-
-        .step-flow-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1.5rem;
-            position: relative;
-        }
-
-        .step-flow-left {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex-shrink: 0;
-        }
-
-        .step-flow-number {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: white;
-            background: #3b82f6;
-            transition: all 0.3s;
-            flex-shrink: 0;
-        }
-
-        .step-flow-number.completed {
-            background: #22c55e;
-        }
-
-        .step-flow-line {
-            width: 3px;
-            height: 2rem;
-            background: #e2e8f0;
-            margin: 0.5rem 0;
-        }
-
-        .step-flow-line.completed {
-            background: #22c55e;
-        }
-
-        .step-flow-card {
-            flex: 1;
-            background: white;
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            border: 2px solid #e2e8f0;
-            transition: all 0.3s;
-            cursor: pointer;
-            text-align: left;
-        }
-
-        .step-flow-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-            border-color: #3b82f6;
-        }
-
-        .step-flow-card.completed {
-            border-color: #22c55e;
-        }
-
-        .step-flow-card h3 {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 0.5rem;
-        }
-
-        .step-flow-card p {
-            font-size: 0.95rem;
-            color: #64748b;
-            margin-bottom: 0.75rem;
-        }
-
-        .step-flow-status {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .step-flow-status.available {
-            background: #eff6ff;
-            color: #2563eb;
-        }
-
-        .step-flow-status.completed {
-            background: #f0fdf4;
-            color: #16a34a;
-        }
-
-        .skip-link {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            text-decoration: underline;
-            cursor: pointer;
-            margin-left: 0.5rem;
-            background: none;
-            border: none;
-            padding: 0;
-        }
-
-        .skip-link:hover {
-            color: #64748b;
-        }
-
         .report-btn-container {
             text-align: center;
             margin-top: 2rem;
@@ -670,11 +551,11 @@
             padding: 2rem 1rem;
             background: #f8fafc;
             overflow-y: auto;
-            z-index: 25;
+            z-index: 35;
         }
 
         .report-section.active {
-            z-index: 65;
+            z-index: 75;
         }
 
         .report-container {
@@ -754,24 +635,6 @@
 
             .service-cards-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .step-flow-item {
-                gap: 1rem;
-            }
-
-            .step-flow-number {
-                width: 44px;
-                height: 44px;
-                font-size: 1.1rem;
-            }
-
-            .step-flow-card h3 {
-                font-size: 1.1rem;
-            }
-
-            .step-flow-card p {
-                font-size: 0.85rem;
             }
         }
     </style>
@@ -1135,75 +998,19 @@
         }
 
         // ===================================
-        // 스텝 플로우 상태 관리
+        // 통합 리포트 버튼 상태 관리
         // ===================================
-        function getStepStates() {
-            return {
-                diagnosis: !!localStorage.getItem('insidejob_diagnosis_result'),
-                calculator: !!localStorage.getItem('insidejob_calculation_result')
-            };
-        }
-
-        function updateStepFlowUI() {
-            const states = getStepStates();
-
-            // Step 1: 진단
-            setStepState(1, states.diagnosis ? 'completed' : 'available');
-
-            // Step 2: 계산기
-            setStepState(2, states.calculator ? 'completed' : 'available');
-
-            // Step 3: 자소서 (항상 available)
-            setStepState(3, 'available');
-
-            // Step 1 연결선
-            var line1 = document.getElementById('step-line-1');
-            if (line1) {
-                line1.classList.toggle('completed', states.diagnosis);
-            }
-            // Step 2 연결선
-            var line2 = document.getElementById('step-line-2');
-            if (line2) {
-                line2.classList.toggle('completed', states.calculator);
-            }
-
-            // 통합 리포트 버튼: 진단+계산기 둘 다 완료 시 표시
+        function updateReportButton() {
             var reportBtn = document.getElementById('show-report-btn');
-            if (reportBtn) {
-                if (states.diagnosis && states.calculator) {
-                    reportBtn.classList.add('visible');
-                } else {
-                    reportBtn.classList.remove('visible');
-                }
-            }
-        }
+            if (!reportBtn) return;
 
-        function setStepState(stepId, state) {
-            var num = document.getElementById('step-num-' + stepId);
-            var card = document.getElementById('step-card-' + stepId);
-            var status = document.getElementById('step-status-' + stepId);
-            if (!num || !card || !status) return;
+            var hasDiagnosis = !!localStorage.getItem('insidejob_diagnosis_result');
+            var hasCalculator = !!localStorage.getItem('insidejob_calculation_result');
 
-            if (state === 'completed') {
-                num.classList.add('completed');
-                num.innerHTML = '<i class="fas fa-check"></i>';
-                card.classList.add('completed');
-                status.className = 'step-flow-status completed';
-                status.textContent = '완료';
+            if (hasDiagnosis && hasCalculator) {
+                reportBtn.classList.add('visible');
             } else {
-                num.classList.remove('completed');
-                num.textContent = stepId;
-                card.classList.remove('completed');
-                status.className = 'step-flow-status available';
-                status.textContent = '시작하기';
-            }
-        }
-
-        function skipToStep(n) {
-            if (n === 2) {
-                loadService('calculator');
-            } else if (n === 3) {
-                loadService('toolkit');
+                reportBtn.classList.remove('visible');
             }
         }
 
@@ -1212,7 +1019,7 @@
         // ===================================
         function showServiceCards() {
             showSection('service-cards-section');
-            updateStepFlowUI();
+            updateReportButton();
         }
 
         // ===================================
@@ -1286,10 +1093,10 @@
                     backToServices();
                 }
                 if (event.data && event.data.action === 'diagnosisComplete') {
-                    updateStepFlowUI();
+                    updateReportButton();
                 }
                 if (event.data && event.data.action === 'calculatorComplete') {
-                    updateStepFlowUI();
+                    updateReportButton();
                 }
             });
         }
@@ -1500,7 +1307,6 @@
         window.loadService = loadService;
         window.backToServices = backToServices;
         window.resetConsent = resetConsent;
-        window.skipToStep = skipToStep;
         window.showIntegratedReport = showIntegratedReport;
         window.backFromReport = backFromReport;
         window.downloadReportPDF = downloadReportPDF;

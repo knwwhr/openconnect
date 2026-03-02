@@ -226,33 +226,40 @@
             // 진단 결과 자동 반영용 알림
             const [diagnosisNotice, setDiagnosisNotice] = useState(null);
 
-            // 진단 결과에서 추천 직무 자동 반영
+            // 진단 결과에서 추천 직무 자동 반영 (setTimeout으로 authorizedJobDatabase 정의 후 실행)
+            const diagnosisAutoApplied = useRef(false);
             useEffect(() => {
-                try {
-                    const diagRaw = localStorage.getItem('insidejob_diagnosis_result');
-                    if (!diagRaw) return;
-                    const diagData = JSON.parse(diagRaw);
-                    if (!diagData || !diagData.topJobs || diagData.topJobs.length === 0) return;
+                if (diagnosisAutoApplied.current) return;
+                const timer = setTimeout(() => {
+                    try {
+                        const diagRaw = localStorage.getItem('insidejob_diagnosis_result');
+                        if (!diagRaw) return;
+                        const diagData = JSON.parse(diagRaw);
+                        if (!diagData || !diagData.topJobs || diagData.topJobs.length === 0) return;
 
-                    const topJob = diagData.topJobs[0];
-                    const jobId = topJob.jobId;
-                    const jobTitle = topJob.title || jobId;
+                        const topJob = diagData.topJobs[0];
+                        if (!topJob || !topJob.jobId) return;
+                        const jobId = topJob.jobId;
+                        const jobTitle = topJob.title || jobId;
 
-                    // authorizedJobDatabase에서 해당 jobId가 있는지 확인
-                    const allJobs = Object.values(authorizedJobDatabase)
-                        .filter(v => Array.isArray(v))
-                        .flat();
+                        if (typeof authorizedJobDatabase === 'undefined') return;
+                        const allJobs = Object.values(authorizedJobDatabase)
+                            .filter(v => Array.isArray(v))
+                            .flat();
 
-                    if (allJobs.includes(jobId)) {
-                        setFormData(prev => ({ ...prev, targetJob: jobId }));
-                        setDiagnosisNotice('진단 결과에서 추천된 \'' + jobTitle + '\'이(가) 자동 선택되었습니다');
-                    } else {
-                        setFormData(prev => ({ ...prev, targetJob: 'custom', customJob: jobTitle }));
-                        setDiagnosisNotice('진단 결과에서 추천된 \'' + jobTitle + '\'이(가) 자동 입력되었습니다');
+                        diagnosisAutoApplied.current = true;
+                        if (allJobs.includes(jobId)) {
+                            setFormData(prev => ({ ...prev, targetJob: jobId }));
+                            setDiagnosisNotice('진단 결과에서 추천된 \'' + jobTitle + '\'이(가) 자동 선택되었습니다');
+                        } else {
+                            setFormData(prev => ({ ...prev, targetJob: 'custom', customJob: jobTitle }));
+                            setDiagnosisNotice('진단 결과에서 추천된 \'' + jobTitle + '\'이(가) 자동 입력되었습니다');
+                        }
+                    } catch(e) {
+                        console.warn('진단 결과 자동 반영 실패:', e);
                     }
-                } catch(e) {
-                    console.warn('진단 결과 자동 반영 실패:', e);
-                }
+                }, 0);
+                return () => clearTimeout(timer);
             }, []);
 
             const [formData, setFormData] = useState({
@@ -1866,25 +1873,18 @@
                 } catch(e) { console.warn('Calculator bridge save failed:', e); }
             };
 
-            // 계산결과 저장 함수 
+            // 계산결과 저장 함수 (calculateCareerResults에서 이미 자동 저장되므로 알림만 표시)
             const saveCalculationResult = async () => {
                 if (!calculatorResult) return;
-                
+
                 // 게스트 사용자인 경우 저장용 회원가입 모달 표시
                 if (currentUser?.isGuest) {
                     setShowSaveResultSignupModal?.(true);
                     return;
                 }
-                
-                try {
-                    // 로컬 스토리지에 저장
-                    localStorage.setItem('insidejob_calculation_result', JSON.stringify(calculatorResult));
-                    setIsResultSaved(true);
-                    showNotification?.('계산 결과가 저장되었습니다!', 'success');
-                } catch (error) {
-                    console.error('저장 오류:', error);
-                    showNotification?.('저장에 실패했습니다.', 'error');
-                }
+
+                setIsResultSaved(true);
+                showNotification?.('계산 결과가 저장되었습니다!', 'success');
             };
 
             // HTML 다운로드 함수
@@ -2075,17 +2075,20 @@
                     ctx.textAlign = 'right';
                     ctx.fillText(bd.score + '/' + bd.max, 540, y);
 
-                    // 바 배경
+                    // 바 배경 (roundRect 폴백)
                     ctx.fillStyle = 'rgba(255,255,255,0.1)';
                     ctx.beginPath();
-                    ctx.roundRect(60, y + 8, 480, 16, 8);
+                    if (ctx.roundRect) { ctx.roundRect(60, y + 8, 480, 16, 8); } else { ctx.rect(60, y + 8, 480, 16); }
                     ctx.fill();
 
                     // 바 값
                     ctx.fillStyle = barColors[i];
                     ctx.beginPath();
-                    ctx.roundRect(60, y + 8, 480 * pct, 16, 8);
-                    ctx.fill();
+                    var barW = 480 * pct;
+                    if (barW > 0) {
+                        if (ctx.roundRect) { ctx.roundRect(60, y + 8, barW, 16, 8); } else { ctx.rect(60, y + 8, barW, 16); }
+                        ctx.fill();
+                    }
                 });
 
                 // InsideJob 워터마크

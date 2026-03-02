@@ -225,8 +225,8 @@ class AssessmentManager {
             // 크로스 서비스 데이터 브릿지
             try {
                 localStorage.setItem('insidejob_diagnosis_result', JSON.stringify({
-                    riasecScores: results.riasecScores,
-                    topJobs: results.topJobs.map(j => ({
+                    riasecScores: results.riasecScores || {},
+                    topJobs: (results.topJobs || []).map(j => ({
                         jobId: j.jobId, title: j.title, score: j.score
                     })),
                     timestamp: new Date().toISOString()
