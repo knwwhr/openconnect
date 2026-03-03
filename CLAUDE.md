@@ -245,3 +245,27 @@ src/
 - **사용자 경험**: 정원성장 메타포 + 경쟁력 카드 공유 + 통합 리포트
 
 **최종 목표**: "316개 직무별 취업 경쟁력 정량화" 니치 포지셔닝으로 시장 차별화
+
+---
+
+## 📌 To-Do List
+
+### 1. 인기 직무 실시간 업데이트 (Vercel Cron)
+계산기 "희망 직무 선택"에 채용시장 인기 직무 데이터를 주기적으로 반영하는 기능.
+
+**데이터 소스 (API 방식 확정, 스크래핑 비추천)**
+- **고용행정통계 OPIA API** (`https://eis.work24.go.kr/opi/joApi.do`) — 월별 직종별 구인 건수 집계, 지역별·급여별 통계
+- **워크넷 채용정보 API** (`http://openapi.work.go.kr/opi/opi/opia/wantedApi.do`) — 현재 활성 채용공고 수 (직종코드별)
+- 사람인/잡코리아/원티드 API는 접근 제한으로 사용 불가
+
+**구현 방식**
+- Vercel Cron (`vercel.json`, 1일 1회) → Serverless Function에서 API 호출 → 가공 → Vercel Blob 또는 Upstash Redis에 JSON 저장
+- Calculator 프론트엔드에서 저장된 JSON을 읽어 인기 직무 뱃지/순위 표시
+- 무료 플랜 제약: 최소 1일 1회, 함수 60초 제한, XML→JSON 파싱 필요
+
+**선행 작업**
+- [ ] 고용24 포털에서 API 키 발급 신청 (개인/기관 등록)
+- [ ] 워크넷 직종코드 ↔ 계산기 직무 ID 매핑 테이블 구축
+- [ ] Vercel 프로젝트 생성 (현재 GitHub Pages와 별도)
+- [ ] `/api/cron` serverless function 개발
+- [ ] 프론트엔드에 인기 직무 표시 UI 구현
