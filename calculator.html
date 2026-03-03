@@ -1585,12 +1585,12 @@
                     if (selectedJob === 'translator' || formData.customJob.toLowerCase().includes('번역')) {
                         skillRecommendations.push({
                             title: "고급 어학능력 필수",
-                            content: "번역 직무는 원어민 수준의 언어 실력이 요구됩니다. TOEIC 950점 이상, 실무 번역 경험을 쌓아보세요."
+                            content: "2025년 상반기 주요 채용공고 722건 중 84.8%가 TOEIC 점수를 반영합니다(한국토익위원회). 번역 직무는 특히 원어민 수준이 요구되며, 기준 점수를 제시한 공고의 55.8%가 700점 이상을 요구합니다. 번역직은 이보다 훨씬 높은 950점 이상이 사실상 커트라인입니다."
                         });
                     } else {
                         skillRecommendations.push({
                             title: "영어 실력 향상",
-                            content: "대부분의 직장에서 영어는 기본 소양입니다. TOEIC 800점 이상을 목표로 꾸준히 학습하세요."
+                            content: "2025년 상반기 주요 채용공고 722건 중 84.8%가 TOEIC 점수를 반영하고, 기준 점수가 있는 공고의 55.8%가 700점 이상을 요구합니다(한국토익위원회). 어학 점수가 없으면 서류 단계에서 걸러질 수 있으므로, TOEIC 800점 이상을 우선 확보하는 것이 효율적입니다."
                         });
                     }
                 }
@@ -1608,28 +1608,28 @@
                         if (progSkills.length < 2) {
                             skillRecommendations.push({
                                 title: "핵심 프로그래밍 언어 학습",
-                                content: "Python, Java, JavaScript 등 업계 표준 언어를 익혀 개발 역량을 기르세요."
+                                content: "경총 조사(2025)에 따르면 기업의 81.6%가 '직무 관련 실무 경험'을 최우선 채용 기준으로 봅니다. 기술직에서 프로그래밍 언어는 실무 경험의 기본 전제이므로, Python·Java·JavaScript 중 2개 이상을 실무 수준으로 익혀야 경쟁력이 생깁니다."
                             });
                         }
-                        
-                        // 프로젝트 경험 부족한 경우  
+
+                        // 프로젝트 경험 부족한 경우
                         if (!techExp.includes('github_10plus') && !techExp.includes('open_source')) {
                             skillRecommendations.push({
                                 title: "기술 포트폴리오 강화",
-                                content: "GitHub에 프로젝트를 정리하고, 오픈소스 기여 활동을 통해 실무 능력을 입증하세요."
+                                content: "2025년 신입 서류 합격률은 19.4%에 불과합니다(한국경제인협회). 기술직에서 GitHub 포트폴리오는 이력서만으로 증명하기 어려운 코딩 실력을 직접 보여주는 수단입니다. 프로젝트 10개 이상 정리, 또는 오픈소스 기여 이력이 서류 차별화의 핵심입니다."
                             });
                         } else if (!techExp.includes('personal_service') && !techExp.includes('startup_project')) {
                             skillRecommendations.push({
                                 title: "실무 프로젝트 경험",
-                                content: "토이 프로젝트보다는 실제 사용자가 있는 서비스 개발 경험을 쌓아보세요."
+                                content: "기업의 82.0%가 경력직을 선호하고, 순수 신입만 채용하는 기업은 2.6%에 불과합니다(경총, 2025). 토이 프로젝트보다 실제 사용자가 있는 서비스를 만들어본 경험이 '경력에 준하는 신입'으로 평가받는 핵심 요소입니다."
                             });
                         }
-                        
+
                         // 자격증 부족한 경우
                         if (techCerts.length === 0) {
                             skillRecommendations.push({
                                 title: "기술 자격증 취득",
-                                content: "정보처리기사, SQLD 등 한국 IT 업계 인정 자격증으로 전문성을 입증하세요."
+                                content: "국가기술자격 기사급 보유자의 취업률은 58.9%로, 전체 평균(47.5%)보다 11.4%p 높습니다(고용노동부, 2023). 정보처리기사·SQLD 등은 서류 심사 시 기본 역량 검증 수단으로 활용되므로, 취득해두면 서류 탈락 리스크를 줄일 수 있습니다."
                             });
                         }
                     } else if (jobGroup === 'marketing_sales' && skillScore < 28) {
@@ -1642,23 +1642,23 @@
                         if (marketingTools.length < 2) {
                             skillRecommendations.push({
                                 title: "디지털 마케팅 도구 활용",
-                                content: "네이버 비즈니스, Google Analytics, Meta 광고관리자 등 실무 도구를 익히세요."
+                                content: "대한상공회의소 조사(2025)에서 기업의 69.2%가 채용 시 디지털·AI 역량을 고려한다고 응답했습니다. 마케팅 직무에서 GA, 네이버 비즈니스, Meta 광고관리자 등 도구 활용 능력은 '디지털 역량'의 직접적 증거이므로, 2개 이상 실무 수준으로 다룰 수 있어야 합니다."
                             });
                         }
-                        
+
                         // 마케팅 경험 부족한 경우
                         if (!marketingExp.includes('campaign_management') && !marketingExp.includes('content_marketing')) {
                             skillRecommendations.push({
                                 title: "마케팅 성과 사례 축적",
-                                content: "개인 블로그나 소상공인 지원을 통해 마케팅 성과를 측정 가능한 수치로 만들어보세요."
+                                content: "잡코리아 조사(2025)에서 HR 담당자의 63%가 '현장 전문성'을 가장 중요한 인재 요건으로 꼽았습니다. 마케팅에서 현장 전문성이란 곧 '측정 가능한 성과'입니다. 개인 블로그 운영이나 소상공인 마케팅 지원을 통해 노출수·전환율 등 숫자로 보여줄 수 있는 성과를 만들어 두세요."
                             });
                         }
-                        
+
                         // 자격증 부족한 경우
                         if (marketingCerts.length === 0) {
                             skillRecommendations.push({
                                 title: "마케팅 자격증 취득",
-                                content: "네이버 서치어드바이저, ADsP 등 한국 마케팅 업계 인정 자격증을 취득하세요."
+                                content: "국가기술자격 보유자의 1년 내 취업률은 47.5%(고용노동부, 2023)로, 서류 심사에서 객관적 역량 증빙으로 활용됩니다. ADsP(데이터분석준전문가)나 네이버 검색광고 마케터 인증은 마케팅 직무 지원 시 데이터 활용 능력을 증명하는 효과적인 수단입니다."
                             });
                         }
                     } else if (jobGroup === 'planning_strategy' && skillScore < 28) {
@@ -1671,33 +1671,33 @@
                         if (!officeSkills.includes('excel') && !officeSkills.includes('sql')) {
                             skillRecommendations.push({
                                 title: "데이터 분석 도구 학습",
-                                content: "Excel 고급 기능과 SQL 기초를 익혀 데이터 기반 의사결정 역량을 기르세요."
+                                content: "2025년 채용 시장의 핵심 트렌드는 '직무중심 채용 강화'로, 기업의 53.0%가 이를 채택하고 있습니다(경총). 기획·전략 직무에서 Excel 고급 기능(피벗, VLOOKUP, 매크로)과 SQL은 데이터 기반 의사결정의 기본 도구이므로, 직무 적합성을 입증하는 핵심 역량입니다."
                             });
                         } else if (!officeSkills.includes('google_analytics') && !officeSkills.includes('notion')) {
                             skillRecommendations.push({
                                 title: "디지털 분석 도구 활용",
-                                content: "Google Analytics, Notion 등 디지털 업무 도구로 효율성을 높여보세요."
+                                content: "대한상공회의소(2025)에 따르면 기업의 69.2%가 채용 시 AI·디지털 역량을 고려합니다. 기획 직무에서 GA, Notion 등 디지털 도구 활용 능력은 단순 '편의'가 아니라 채용 평가 항목으로 자리잡고 있습니다."
                             });
                         }
-                        
+
                         // 기획 경험 부족한 경우
                         if (!planningExp.includes('business_plan') && !planningExp.includes('consulting_project')) {
                             skillRecommendations.push({
                                 title: "기획서 작성 경험",
-                                content: "스타트업 인턴이나 프로젝트를 통해 실제 사업계획서나 기획서 작성 경험을 쌓으세요."
+                                content: "기업의 81.6%가 '직무 관련 업무 경험'을 최우선 채용 기준으로 보며, 이 비율은 2023년 58.4%에서 급격히 상승했습니다(경총). 스타트업 인턴이나 공모전을 통해 실제 사업계획서·기획서 작성 경험을 만들어야 서류에서 '경험 있음'으로 분류됩니다."
                             });
                         } else if (!planningExp.includes('market_research') && !planningExp.includes('data_analysis')) {
                             skillRecommendations.push({
                                 title: "시장 분석 실무 경험",
-                                content: "시장조사나 데이터 분석 프로젝트를 통해 분석적 사고력을 기르세요."
+                                content: "기업의 82.0%가 경력직을 선호하고 순수 신입만 채용하는 기업은 2.6%입니다(경총, 2025). 시장조사·데이터 분석 프로젝트 경험은 기획직 지원 시 '경력에 준하는 신입'으로 평가받을 수 있는 핵심 차별화 요소입니다."
                             });
                         }
-                        
+
                         // 자격증 부족한 경우
                         if (businessCerts.length === 0) {
                             skillRecommendations.push({
                                 title: "전문 자격증 취득",
-                                content: "ADSP(데이터분석준전문가)나 관련 전문 자격증으로 전문성을 입증하세요."
+                                content: "국가기술자격 보유자의 1년 내 취업률은 47.5%이며, 기사급은 58.9%로 더 높습니다(고용노동부, 2023). ADsP(데이터분석준전문가) 등 기획·전략 관련 자격증은 서류 심사에서 분석 역량의 객관적 증빙으로 활용됩니다."
                             });
                         }
                     } else if (jobGroup === 'design' && skillScore < 28) {
@@ -1710,31 +1710,31 @@
                         if (designTools.length < 2) {
                             skillRecommendations.push({
                                 title: "디자인 툴 숙련도",
-                                content: "Figma, Photoshop, Illustrator 등 업계 표준 도구를 능숙하게 다룰 수 있도록 연습하세요."
+                                content: "2025년 채용 시장에서 기업의 53.0%가 '직무중심 채용'을 강화하고 있습니다(경총). 디자인 직무에서 Figma, Photoshop, Illustrator는 직무 역량의 가장 기본적인 증거이므로, 2개 이상의 도구를 실무 수준으로 다룰 수 있어야 서류 통과가 가능합니다."
                             });
                         }
-                        
+
                         // 포트폴리오 경험 부족한 경우
                         if (!designExp.includes('portfolio_website') && !designExp.includes('client_work')) {
                             skillRecommendations.push({
                                 title: "포트폴리오 웹사이트",
-                                content: "자신만의 포트폴리오 웹사이트를 만들어 작업물을 체계적으로 정리하세요."
+                                content: "2025년 신입 서류 합격률은 19.4%입니다(한국경제인협회). 디자인 직무에서 포트폴리오 사이트는 이력서의 텍스트만으로는 전달할 수 없는 시각적 역량을 직접 보여주는 유일한 수단입니다. 작업물을 체계적으로 정리한 웹사이트가 서류 차별화의 핵심입니다."
                             });
                         }
-                        
+
                         // 실무 경험 부족한 경우
                         if (!designExp.includes('freelance_projects') && !designExp.includes('brand_design')) {
                             skillRecommendations.push({
                                 title: "실무 프로젝트 경험",
-                                content: "프리랜서 프로젝트나 브랜드 디자인을 통해 실제 클라이언트와의 작업 경험을 쌓으세요."
+                                content: "HR 담당자의 63%가 '현장 전문성'을 가장 중요한 인재 요건으로 꼽았습니다(잡코리아, 2025). 학교 과제가 아닌 실제 클라이언트와의 프리랜서 작업이나 브랜드 디자인 경험은 '현장에서 바로 투입 가능한 인재'로 평가받게 합니다."
                             });
                         }
-                        
+
                         // 자격증 부족한 경우
                         if (designCerts.length === 0) {
                             skillRecommendations.push({
                                 title: "디자인 자격증 취득",
-                                content: "GTQ 그래픽기술자격, 웹디자인기능사 등 한국 디자인 업계 인정 자격증으로 전문성을 입증하세요."
+                                content: "웹디자인기능사 보유자의 취업률은 57.8%로 여성 청년층 기준 상위권입니다(고용노동부, 2023). GTQ 그래픽기술자격과 함께 서류 심사에서 디자인 기본 역량의 객관적 증빙으로 활용되므로, 포트폴리오를 보완하는 역할을 합니다."
                             });
                         }
                     } else if (jobGroup === 'business_support' && skillScore < 28) {
@@ -1747,31 +1747,31 @@
                         if (!businessTools.includes('ms_office')) {
                             skillRecommendations.push({
                                 title: "기본 오피스 스킬",
-                                content: "MS Office(Word, Excel, PowerPoint)는 모든 사무직의 기본입니다. 충분히 숙달하세요."
+                                content: "경영지원 직무 채용공고 대부분이 MS Office 활용 능력을 필수 요건으로 명시합니다. 기업의 53.0%가 직무중심 채용을 강화하는 추세(경총, 2025)에서, 오피스 미숙련은 곧 '직무 기본기 부족'으로 평가됩니다. Word·Excel·PowerPoint를 실무 수준으로 숙달하는 것이 최우선입니다."
                             });
                         }
-                        
+
                         // 경영지원 경험 부족한 경우
                         if (!businessExp.includes('process_improvement') && !businessExp.includes('team_coordination')) {
                             skillRecommendations.push({
                                 title: "프로세스 개선 경험",
-                                content: "인턴이나 아르바이트에서 업무 효율성을 개선한 구체적인 사례를 만들어보세요."
+                                content: "기업의 81.6%가 '직무 관련 업무 경험'을 최우선 채용 기준으로 봅니다(경총, 2025). 경영지원에서는 인턴이나 아르바이트 중 업무 프로세스를 개선한 구체적 사례(예: 보고서 작성 시간 단축, 데이터 정리 자동화)가 면접에서 가장 효과적인 어필 포인트입니다."
                             });
                         }
-                        
+
                         // 한국 사무환경 도구 부족한 경우
                         if (!businessTools.includes('hangul') && !businessTools.includes('email_tools')) {
                             skillRecommendations.push({
                                 title: "한국 사무환경 적응",
-                                content: "한글(HWP)과 이메일 도구는 한국 기업에서 필수적으로 사용되는 도구입니다."
+                                content: "공공기관과 다수의 국내 기업에서 한글(HWP)은 공식 문서 작성의 표준 도구입니다. 경영지원 직무에서 HWP·그룹웨어 등 한국 사무환경 특화 도구의 사용 가능 여부가 실무 투입 가능성의 판단 기준이 됩니다."
                             });
                         }
-                        
+
                         // 자격증 부족한 경우
                         if (businessCerts.length === 0) {
                             skillRecommendations.push({
                                 title: "경영지원 자격증 취득",
-                                content: "컴활 1급, 사무자동화산업기사 등 경영지원 업무 관련 자격증을 취득하세요."
+                                content: "컴퓨터활용능력 2급은 보유자 수 65,290명으로 가장 많이 취득되는 국가자격이며, 취업률은 53.3%입니다(고용노동부, 2023). 경영지원 직무에서 컴활 1급·사무자동화산업기사는 사실상 기본 스펙으로 간주되므로, 미보유 시 서류에서 불이익을 받을 수 있습니다."
                             });
                         }
                     } else if (jobGroup === 'specialized_professional' && skillScore < 28) {
@@ -1784,37 +1784,37 @@
                         if (specializedTools.length < 2) {
                             skillRecommendations.push({
                                 title: "전문 도구 활용 능력",
-                                content: "해당 분야의 전문 소프트웨어나 장비 사용법을 익혀 전문성을 높이세요."
+                                content: "기업의 53.0%가 직무중심 채용을 강화하고 있습니다(경총, 2025). 전문직에서 해당 분야의 소프트웨어·장비 사용 능력은 직무 적합성 판단의 1순위 기준이므로, 2개 이상의 전문 도구를 실무 수준으로 다룰 수 있어야 합니다."
                             });
                         }
-                        
+
                         // 전문 경험 부족한 경우
                         if (!specializedExp.includes('field_experience') && !specializedExp.includes('research_project')) {
                             skillRecommendations.push({
                                 title: "현장 실무 경험",
-                                content: "인턴십이나 연구 프로젝트를 통해 실제 현장에서의 경험을 쌓으세요."
+                                content: "사람인 조사(2025)에 따르면 인턴→정규직 전환율은 평균 71.6%이며, 전환 평가 기준 1위는 '직무적합성(30.9%)'입니다. 전문직의 경우 인턴십·연구 프로젝트 등 현장 경험이 직무적합성을 증명하는 가장 직접적인 방법입니다."
                             });
                         }
-                        
+
                         // 전문 자격증 부족한 경우
                         if (specializedCerts.length === 0) {
                             skillRecommendations.push({
                                 title: "전문 자격증 취득",
-                                content: "해당 분야의 국가기술자격증이나 전문 자격증으로 전문성을 입증하세요."
+                                content: "국가기술자격 기사급 보유자의 취업률은 58.9%로 전체 평균(47.5%)보다 11.4%p 높습니다(고용노동부, 2023). 전문직 분야에서 자격증은 법적 요건이거나 필수 우대 요건인 경우가 많으므로, 미보유 시 지원 자체가 불가능한 경우가 있습니다."
                             });
                         }
-                        
+
                         // 지속적 학습 추천
                         if (!specializedExp.includes('continuing_education') && !specializedExp.includes('conference_participation')) {
                             skillRecommendations.push({
                                 title: "지속적 전문성 개발",
-                                content: "학회 참여, 전문 교육 수강 등을 통해 최신 동향을 파악하고 전문성을 지속적으로 발전시키세요."
+                                content: "잡코리아 조사(2025)에서 HR 담당자의 63%가 '현장 전문성'을, 62%가 '소통·협업 능력'을 핵심 인재 요건으로 꼽았습니다. 학회·컨퍼런스 참여는 최신 동향 파악과 업계 네트워킹을 동시에 충족시키는 활동으로, 면접에서 '성장 의지'를 보여주는 구체적 근거가 됩니다."
                             });
                         }
                     } else if (skillScore < 28) {
                         skillRecommendations.push({
                             title: "업무 효율화 도구",
-                            content: "Excel 고급 기능, Notion, Slack 등 업무 생산성 도구 활용 능력을 기르세요."
+                            content: "대한상공회의소 조사(2025)에서 기업의 69.2%가 채용 시 디지털·AI 역량을 고려한다고 응답했습니다. Excel 고급 기능, Notion, Slack 등 생산성 도구는 직무를 불문하고 '디지털 업무 역량'의 기본 증거로 평가되고 있습니다."
                         });
                     }
                 } else {
@@ -1828,37 +1828,37 @@
                         if (!generalTools.includes('ms_office')) {
                             skillRecommendations.push({
                                 title: "필수 오피스 스킬 향상",
-                                content: "MS Office(Word, Excel, PowerPoint)는 모든 업무의 기본 도구입니다."
+                                content: "기업의 53.0%가 직무중심 채용을 강화하는 추세입니다(경총, 2025). 어떤 직무든 MS Office는 기본 업무 도구이며, 미숙련은 서류 단계에서 '업무 기본기 부족'으로 평가될 수 있습니다."
                             });
                         }
-                        
+
                         if (!generalTools.includes('hangul') && !generalTools.includes('email_tools')) {
                             skillRecommendations.push({
                                 title: "한국 사무환경 적응",
-                                content: "한글(HWP)과 이메일 도구는 한국 기업에서 필수적으로 사용되는 도구입니다."
+                                content: "공공기관과 다수의 국내 기업에서 한글(HWP)은 공식 문서 표준입니다. 한국 사무환경 특화 도구(HWP, 그룹웨어) 사용 가능 여부가 실무 투입 가능성의 판단 기준이 되므로, 기본적인 활용 능력을 갖춰야 합니다."
                             });
                         }
-                        
+
                         // 경험 부족한 경우
                         if (!generalExp.includes('internship_related') && !generalExp.includes('parttime_related')) {
                             skillRecommendations.push({
                                 title: "관련 실무 경험 축적",
-                                content: "인턴십이나 아르바이트를 통해 해당 분야의 실무 경험을 쌓아보세요."
+                                content: "인턴→정규직 전환율은 평균 71.6%이며, 전환 평가 1순위는 직무적합성(30.9%)입니다(사람인, 2025). 인턴십은 취업의 '지름길'이 아니라 사실상 '정규 채용 프로세스'이므로, 관련 분야 인턴 경험이 가장 효율적인 취업 전략입니다."
                             });
                         }
-                        
+
                         if (!generalExp.includes('project_team') && !generalExp.includes('club_activity')) {
                             skillRecommendations.push({
                                 title: "팀 프로젝트 경험",
-                                content: "동아리, 스터디, 팀 프로젝트를 통해 협업 능력을 기르세요."
+                                content: "HR 담당자의 62%가 '소통·협업 능력'을 핵심 인재 요건으로 꼽았습니다(잡코리아, 2025). 동아리·스터디·팀 프로젝트는 이력서에 '협업 경험'을 기재할 수 있는 가장 접근성 높은 방법이며, 면접에서도 구체적 사례로 활용됩니다."
                             });
                         }
-                        
+
                         // 자격증 부족한 경우
                         if (generalCerts.length === 0) {
                             skillRecommendations.push({
                                 title: "기본 자격증 취득",
-                                content: "컴활, Excel 전문가 등 기본적인 업무 자격증을 취득하여 역량을 입증하세요."
+                                content: "국가기술자격 보유자의 1년 내 취업률은 47.5%(고용노동부, 2023)입니다. 컴활·Excel 전문가 등 기본 자격증은 서류 심사에서 최소한의 업무 역량을 객관적으로 증명하는 수단으로, 미보유 시 다른 지원자 대비 불리합니다."
                             });
                         }
                         
@@ -1875,27 +1875,27 @@
                 const jobPrepServices = {
                     'resume_reviewed': {
                         title: "전문가 이력서 검토",
-                        content: "채용담당자가 5초 만에 판단하는 첫인상을 완벽하게 만들어보세요. 현직자나 취업 컨설턴트의 피드백으로 서류 통과율을 높일 수 있습니다."
+                        content: "2025년 신입 서류 합격률은 19.4%에 불과합니다(한국경제인협회). 5명 중 4명이 서류에서 탈락하는 상황에서, 전문가의 이력서 피드백은 통과율을 높이는 가장 직접적인 방법입니다."
                     },
                     'coverletter_tailored': {
                         title: "기업 맞춤형 자기소개서 작성",
-                        content: "지원하는 회사와 직무에 특화된 자기소개서로 차별화하세요. 기업 분석과 직무 이해가 핵심입니다."
+                        content: "기업의 70.8%가 수시채용만 진행하고 있어(경총, 2025), 공채 시즌이 아닌 상시 지원이 일반화되었습니다. 기업·직무별 맞춤형 자기소개서를 미리 준비해두면 채용 공고가 올라왔을 때 빠르게 대응할 수 있습니다."
                     },
                     'interview_experience': {
                         title: "1:1 모의면접 서비스",
-                        content: "실제 면접 환경에서 미리 연습하면 본 면접에서 자신감이 크게 달라집니다. 예상 질문에 대한 완벽한 답변을 준비하세요."
+                        content: "잡플래닛 조사(2025)에서 기업의 48.1%가 신입 채용 시 '조직 문화 적합성'을 가장 중시한다고 응답했습니다. 면접은 스펙이 아닌 커뮤니케이션과 태도로 당락이 결정되는 단계이므로, 실전 연습이 합격률에 직접적으로 영향을 미칩니다."
                     },
                     'network_active': {
                         title: "업계 네트워킹 연결",
-                        content: "숨겨진 채용정보의 상당 부분은 네트워킹을 통해 공유됩니다. 업계 선배들과의 관계를 통해 인사이더 정보를 얻어보세요."
+                        content: "기업의 82.0%가 경력직을 선호합니다(경총, 2025). 업계 현직자와의 네트워킹은 공개되지 않는 채용 정보 접근, 추천 채용 기회 확보, 직무 이해도 향상까지 한 번에 얻을 수 있는 전략입니다."
                     },
                     'internship_experience': {
                         title: "인턴십 기회 매칭",
-                        content: "인턴십은 실무 경험과 정직원 전환 기회를 동시에 제공하는 효과적인 전략입니다. 신입도 경력자처럼 어필할 수 있습니다."
+                        content: "인턴→정규직 전환율은 평균 71.6%이며, 기업의 44.3%는 100% 전환을 실시합니다(사람인, 2025). 전환 평가 기준 1위는 직무적합성(30.9%)으로, 인턴십은 사실상 '장기 면접'이자 가장 확실한 취업 경로입니다."
                     },
                     'referral_available': {
                         title: "추천인 연결 서비스",
-                        content: "추천 채용은 일반 지원보다 합격 가능성이 현저히 높습니다. 업무 역량을 증명해줄 수 있는 신뢰할 수 있는 추천인을 연결해드립니다."
+                        content: "잡코리아는 2025년 채용 트렌드 키워드로 '리퍼럴 프로그램'을 선정했습니다. 기존 직원의 추천을 통한 채용은 기업 입장에서 검증된 인재를 확보하는 방법이므로, 일반 지원보다 서류·면접 통과율이 높은 것으로 알려져 있습니다."
                     }
                 };
 
